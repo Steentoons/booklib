@@ -1,5 +1,7 @@
 const Category = require("../models/categoryModel");
 const Book = require("../models/bookModel");
+const path = require('path')
+const fs = require('fs')
 
 /* 
     Method GET
@@ -86,9 +88,8 @@ const postBooks = (req, res, next) => {
     Method PUT
     Update the books...
 */
-const putBooks = (req, res) => {
+const putBooks = async(req, res, next) => {
     const { title, author, year, category } = req.body;
-    const { cover_image, file } = req.files;
     if (!title) {
         return res.status(400).json({ error: "The title field cannot be empty" });
     } else if (!author) {
@@ -101,32 +102,52 @@ const putBooks = (req, res) => {
         return res
             .status(400)
             .json({ error: "The category field cannot be empty" });
-    } else if (!cover_image) {
+    } else if (!req.files.cover_image) {
         return res
             .status(400)
             .json({ error: "The cover image field is empty or invalid file type" });
-    } else if (!file) {
+    } else if (!req.files.file) {
         return res.status(400).json({ error: "The file field is empty or invalid file type" });
     }
+
+    const { cover_image, file } = req.files;
 
     const newBook = {
         title: title,
         author: author,
         year: year,
         category: category,
-        cover_image: '/book-cover/image.png',
-        file: '/book-cover/file.pdf',
+        cover_image: cover_image[0].path,
+        file: file[0].path,
     };
+
+    const oldBook = await Book.findById(req.params.id)
+
+    // Delete the file and cover image if they exists...
+    const oldCoverPath = path.join(__dirname, '../cover-uploads/', path.basename(oldBook.cover_image))
+    const oldFilePath = path.join(__dirname, '../book-uploads/', path.basename(oldBook.file))
+
+    const removeDups = (filePath) => {
+        fs.stat(filePath, (err) => {
+            if (!err) {
+                fs.unlink(filePath, err => {})
+            }
+        })
+    }
+
+    // Removing duplicates...
+    removeDups(oldCoverPath)
+    removeDups(oldFilePath)
 
     Book.updateOne({ _id: req.params.id }, newBook, (err, book) => {
         if (err) {
             return res
-                .status(200)
-                .json({ message: "The book was updated successifully", data: book });
-        } else {
-            res
                 .status(400)
                 .json({ error: "There was an error when updating the book" });
+        } else {
+            res
+                .status(200)
+                .json({ message: "The book was updated successifully", data: book });
         }
     });
 }

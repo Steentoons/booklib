@@ -4,13 +4,13 @@ const multer = require('multer')
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         if (file.fieldname === 'cover_image') {
-            const dir = "cover-uploads/"
+            const dir = "./backend/cover-uploads/"
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir)
             }
             cb(null, dir)
         } else if (file.fieldname === 'file') {
-            const dir = "book-uploads/"
+            const dir = "./backend/book-uploads/"
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir)
             }
