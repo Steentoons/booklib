@@ -13,6 +13,7 @@ const connect = require('../db/db')
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const bookRoutes = require('./routes/bookRoutes')
+const categoryRoute = require('./routes/categoryRoute')
 const colors = require('colors')
 connect()
 
@@ -68,7 +69,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.use('/api', bookRoutes)
+app.use('/api/books', bookRoutes)
+app.use('/api/categories', categoryRoute)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
