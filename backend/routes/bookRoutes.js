@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const { putBooks, postBooks, getBooks } = require("../controllers/booksController");
+const { putBooks, postBooks, getBooks, deleteBooks } = require("../controllers/booksController");
 const storage = require("../helpers/storageHelper");
 const uploadFilter = require("../helpers/uploadFilterHelper");
 
@@ -25,5 +25,7 @@ router.put("/:id",
         { name: "file", maxCount: 1 },
     ]),
     putBooks);
+
+router.delete("/:id", deleteBooks);
 
 module.exports = router;

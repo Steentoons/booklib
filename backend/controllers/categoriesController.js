@@ -18,7 +18,7 @@ const getCategories = (req, res) => {
     Method POST
     Getting all categories
 */
-const addRoute = (req, res, next) => {
+const addCategories = (req, res, next) => {
     if (!req.body.category) {
         return res.status(400).json("Fill in all the required fields");
     }
@@ -74,8 +74,29 @@ const putCategory = async(req, res) => {
     }
 }
 
+/* 
+    Method DELETE
+    Deleting the categories
+*/
+const deleteCategores = async(req, res) => {
+    // Validate the request...
+    const categoryExists = await Category.exists({ _id: req.params.id })
+    if (!categoryExists) {
+        return res.status(400).json({ error: "Could not find category with that id" })
+    }
+
+    // Delete the category...
+    try {
+        const deletedCategory = await Category.deleteOne({ _id: req.params.id })
+        res.status(200).json({ message: "Category deleted successifully", data: deletedCategory })
+    } catch (err) {
+        res.status(500).json({ error: "Could not delete category" })
+    }
+}
+
 module.exports = {
-    addRoute,
+    addCategories,
     getCategories,
-    putCategory
+    putCategory,
+    deleteCategores
 }

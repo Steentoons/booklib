@@ -1,11 +1,12 @@
 const app = require('express');
-const { addRoute, getCategories, putCategory } = require('../controllers/categoriesController');
+const { addCategories, getCategories, putCategory, deleteCategores } = require('../controllers/categoriesController');
 
 const router = app.Router()
 
 // Handle routes...
-router.post("/", addRoute);
+router.post("/", addCategories);
 router.get("/", getCategories);
 router.put("/:id", putCategory);
+router.delete("/:id", deleteCategores);
 
 module.exports = router;

@@ -1,7 +1,8 @@
 const Category = require("../models/categoryModel");
 const Book = require("../models/bookModel");
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs');
+const manageFiles = require("../helpers/manageFiles");
 
 /* 
     Method GET
@@ -123,21 +124,8 @@ const putBooks = async(req, res, next) => {
 
     const oldBook = await Book.findById(req.params.id)
 
-    // Delete the file and cover image if they exists...
-    const oldCoverPath = path.join(__dirname, '../cover-uploads/', path.basename(oldBook.cover_image))
-    const oldFilePath = path.join(__dirname, '../book-uploads/', path.basename(oldBook.file))
-
-    const removeDups = (filePath) => {
-        fs.stat(filePath, (err) => {
-            if (!err) {
-                fs.unlink(filePath, err => {})
-            }
-        })
-    }
-
-    // Removing duplicates...
-    removeDups(oldCoverPath)
-    removeDups(oldFilePath)
+    // Remove the duplicates module...
+    manageFiles(oldBook.cover_image, oldBook.file)
 
     Book.updateOne({ _id: req.params.id }, newBook, (err, book) => {
         if (err) {
@@ -152,8 +140,35 @@ const putBooks = async(req, res, next) => {
     });
 }
 
+/* 
+    Method DELETE
+    Deleting the books
+*/
+const deleteBooks = async(req, res) => {
+    // Validate the request...
+    const booksExists = await Book.exists({ _id: req.params.id })
+    if (!booksExists) {
+        return res.status(400).json({ error: "Could not find book with that id" })
+    }
+
+    // TODO Delete file data associated with the book...
+    const oldBook = await Book.findById(req.params.id)
+
+    // Remove the duplicates module...
+    manageFiles(oldBook.cover_image, oldBook.file)
+
+    // Delete the category...
+    try {
+        const deletedBook = await Book.deleteOne({ _id: req.params.id })
+        res.status(200).json({ message: "Book deleted successifully", data: deletedBook })
+    } catch (err) {
+        res.status(500).json({ error: "Could not delete book" })
+    }
+}
+
 module.exports = {
     getBooks,
     putBooks,
-    postBooks
+    postBooks,
+    deleteBooks
 }
