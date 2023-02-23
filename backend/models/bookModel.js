@@ -18,6 +18,10 @@ const bookSchema = mongoose.Schema({
         ref: 'Category',
         required: [true, 'category field cannot be empty'],
     },
+    user: {
+        type: String,
+        required: [true, 'The email field is required']
+    },
     cover_image: {
         type: String,
         required: [true, 'cover_image field cannot be empty'],

@@ -2,15 +2,34 @@ POST http://localhost:3000/api/authentication/login
 Content-Type: application/json
 
 {
-    "username": "Luther",
-    "password": "password123"
+    "email": "genius2@gmail.com",
+    "password": "Password1"
 }
 
 ###
 GET http://localhost:3000/api/books
-Authentication: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikx1dGhlciIsImlhdCI6MTY3Njg5MzIwOX0.N72RNmc6r-hWCGGwpyHJapIvhWi2mHdWaEOWBQ2CdFo
+Authentication: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdlbml1czJAZ21haWwuY29tIiwiaWF0IjoxNjc3MTQwOTA3LCJleHAiOjE2NzcxNDA5MzJ9.ReLCv9oo3k62rj6mxXd7_JjzQJJZDdhK4fijMr73l6U
+# POST http://localhost:3000/api/books
+# Content-Type: application/json
+# Authentication: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikx1dGhlciIsImlhdCI6MTY3Njg5MzIwOX0.N72RNmc6r-hWCGGwpyHJapIvhWi2mHdWaEOWBQ2CdFo
+
+### 
+POST http://localhost:3000/api/register
+Content-Type: application/json
+
+{
+    "email": "genius2@gmail.com",
+    "password": "Password1",
+    "name": "steen"
+}
 
 ###
-POST http://localhost:3000/api/books
+GET http://localhost:3000/api/register
+
+###
+POST http://localhost:3000/api/token
 Content-Type: application/json
-Authentication: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikx1dGhlciIsImlhdCI6MTY3Njg5MzIwOX0.N72RNmc6r-hWCGGwpyHJapIvhWi2mHdWaEOWBQ2CdFo
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdlbml1czJAZ21haWwuY29tIiwiaWF0IjoxNjc3MTQwODY2fQ.3vTibNOIdY5idH82Fv7Y3qM2uMpdL5K0UdqJsNrJmAg"
+}

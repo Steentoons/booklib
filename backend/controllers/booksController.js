@@ -9,13 +9,15 @@ const manageFiles = require("../helpers/manageFiles");
     Get the books...
 */
 const getBooks = (req, res) => {
-    Book.find()
-        .then((books) => {
-            return res.status(200).json({ books: books });
-        })
-        .catch((err) => {
-            return res.status(500).json({ error: err });
-        });
+    if (req.user) {
+        Book.find({ user: req.user.email })
+            .then((books) => {
+                return res.status(200).json({ books: books });
+            })
+            .catch((err) => {
+                return res.status(500).json({ error: err });
+            });
+    }
 }
 
 /* 
@@ -60,6 +62,7 @@ const postBooks = (req, res, next) => {
             category: req.body.category,
             cover_image: cover_image[0].path,
             file: file[0].path,
+            user: req.user.email
         };
         const book = new Book(bookObj);
 
@@ -120,6 +123,7 @@ const putBooks = async(req, res, next) => {
         category: category,
         cover_image: cover_image[0].path,
         file: file[0].path,
+        user: req.user.email
     };
 
     const oldBook = await Book.findById(req.params.id)
