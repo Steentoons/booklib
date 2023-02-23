@@ -18,6 +18,7 @@ app.use('/api/categories', categoryRoute)
 app.use('/api/authentication', authRoute)
 app.use('/api/register', userRoute)
 app.use('/api/token', tokenRoute)
+app.use('/api/authentication', authRoute)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

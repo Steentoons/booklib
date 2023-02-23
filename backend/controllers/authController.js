@@ -63,11 +63,22 @@ const login = async(req, res) => {
     method POST
     Login into the system and generating token...
 */
-// const logout = async(req, res) => {
+const logout = async(req, res) => {
+    if (!req.body.token) return res.status(400)
+    const savedRefreshTokenObj = await RefreshToken.findOne()
+    const savedRefreshToken = savedRefreshTokenObj.refreshToken
+    const newRefreshToken = savedRefreshToken.filter((token) => token !== req.body.token)
 
-// }
+    try {
+        savedRefreshTokenObj.refreshToken = newRefreshToken
+        savedRefreshTokenObj.save()
+        res.status(204).json({ message: "You were successifully logged out" })
+    } catch (error) {
+        return res.status(503).json({ error: 'Could not logout' })
+    }
+}
 
 module.exports = {
     login,
-    // logout
+    logout
 }

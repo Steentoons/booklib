@@ -2,6 +2,10 @@ const RefreshToken = require('../models/refreshTokenModel')
 const jwt = require('jsonwebtoken')
 const generateToken = require('../helpers/generateToken')
 
+/*
+    method: POST
+    Refreshing the tokens...
+*/
 const refreshToken = async(req, res) => {
     const refToken = req.body.refreshToken
         // Validate the inputs...
@@ -10,8 +14,11 @@ const refreshToken = async(req, res) => {
     }
 
     // Get refresh tokens from the database...
-    const isRefreshTokenExist = await RefreshToken.exists({ token: refToken })
-    if (!isRefreshTokenExist) {
+    // const isRefreshTokenExist = await RefreshToken.exists({ token: refToken })
+    const savedTokenObj = await RefreshToken.findOne()
+    const savedToken = savedTokenObj.refreshToken
+    console.log(savedToken)
+    if (!savedToken.includes(refToken)) {
         console.log('There is no such refresh token...')
         return res.status(403).json({ error: 'Access Denied' })
     }
@@ -28,4 +35,17 @@ const refreshToken = async(req, res) => {
     })
 }
 
-module.exports = refreshToken
+/*
+    method GET
+    Getting all the tokens
+*/
+
+const getTokens = async(req, res) => {
+    const savedTokens = await RefreshToken.findOne()
+    res.status(200).json({ tokens: savedTokens.refreshToken })
+}
+
+module.exports = {
+    refreshToken,
+    getTokens
+}
