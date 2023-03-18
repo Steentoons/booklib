@@ -1,0 +1,73 @@
+@use '../helpers/' as helpers;
+.dashboard-layout {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 5rem 0;
+}
+
+.dashboard {
+    background: helpers.$purple_dark;
+    width: 1000px;
+    padding: 1.25rem 6.25rem;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: .625rem;
+}
+
+.book-layout {
+    border-radius: 1.25rem;
+    background: helpers.$semi_purple;
+    padding: 1.25rem;
+    display: flex;
+    gap: 1.25rem;
+}
+
+.book-div {
+    width: 100%;
+}
+
+.book-cover {
+    width: 7.5rem;
+    height: 9.4688rem;
+    background: helpers.$purple_dark;
+}
+
+.book-info-layout {
+    display: flex;
+    flex-direction: column;
+    gap: .3125rem;
+}
+
+.book-title {
+    font-weight: bold;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.book-author {
+    color: white;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.book-category {
+    color: white;
+    font-size: 1rem;
+    color: helpers.$red;
+}
+
+.book-year {
+    color: white;
+    font-size: 1rem;
+    color: white;
+}
+
+.book-buttons-layout {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 20px;
+    width: calc(100%)
+}

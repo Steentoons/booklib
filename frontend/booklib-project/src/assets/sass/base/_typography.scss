@@ -1,0 +1,42 @@
+@font-face {
+    font-family: segoeUI;
+    src: url(fonts/segoeui.ttf);
+}
+
+@font-face {
+    font-family: segoeUI_bold;
+    src: url(fonts/segoeuib.ttf);
+}
+
+@mixin font-bold {
+    font-family: segoeUI_bold;
+}
+
+@mixin font-regular {
+    font-family: segoeUI;
+}
+
+// .type_normal {
+//     font-family: segoeUI;
+//     font-size: 16px;
+//     color: white;
+// }
+* {
+    @include font-regular;
+    font-size: 1rem;
+}
+
+.type-logo {
+    @include font-bold;
+    font-size: 1.5rem;
+}
+
+.type-bold {
+    @include font-bold;
+    font-size: 1rem;
+}
+
+.type-form-title {
+    @include font-bold;
+    font-size: 1.25rem;
+}

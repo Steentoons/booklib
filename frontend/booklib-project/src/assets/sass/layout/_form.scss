@@ -1,0 +1,64 @@
+@use '../helpers';
+.form-wrapper-layout {
+    width: 100%;
+    position: relative;
+    z-index: 20;
+    .form-layout {
+        // position: fixed;
+        width: 100%;
+        overflow-y: scroll;
+        background: helpers.$purple;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: fit-content;
+        padding-top: 6.25em;
+        padding-bottom: 1.25em;
+        height: 100vh;
+        form {
+            width: 50%;
+            background: helpers.$purple_dark;
+            border-radius: 20px;
+            padding: 50px 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            row-gap: 20px;
+            h2 {
+                margin-bottom: 1.25em;
+            }
+        }
+    }
+    .form-input-layout {
+        width: 100%;
+        padding: .625rem;
+        background: helpers.$semi_purple;
+        border: none;
+        border-radius: 5px;
+        color: helpers.$white;
+        text-align: center;
+    }
+    .form-input-layout:hover {
+        border: solid helpers.$yellow 1px;
+    }
+    .form-input-layout:focus {
+        border: solid helpers.$yellow 1px;
+    }
+    .form-select-layout {
+        cursor: pointer;
+        border-right: solid helpers.$yellow 10px;
+    }
+    .form-select-layout:hover {
+        border-right: solid helpers.$yellow 10px;
+    }
+    .input-layout {
+        width: 100%;
+    }
+    .read-book-layout {
+        width: 50%;
+        margin-top: 1.25rem;
+        padding: 0 2.5rem;
+    }
+}

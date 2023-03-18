@@ -1,0 +1,46 @@
+@use '../helpers';
+html {
+    box-sizing: border-box;
+    color: helpers.$white;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+    color: inherit;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background: helpers.$purple;
+}
+
+h1,
+p,
+h2 {
+    margin: 0;
+}
+
+button,
+input {
+    border: none;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+.secondary {
+    background: helpers.$red;
+}
+
+.tertiary {
+    background: helpers.$yellow;
+    color: helpers.$purple_dark;
+}

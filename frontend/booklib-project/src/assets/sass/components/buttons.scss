@@ -1,0 +1,53 @@
+@use '../helpers';
+.btn-primary {
+    border-radius: 5px;
+    padding: .9375rem;
+    cursor: pointer;
+    margin-top: 1.25rem;
+}
+
+.btn-primary:hover {
+    border: solid helpers.$white 1px;
+}
+
+.btn-hidden {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+}
+
+@mixin btn-book-list {
+    padding: .625rem 1.25rem;
+    border-radius: 20px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.btn-read-book {
+    background: helpers.$yellow;
+    color: helpers.$purple;
+    @include btn-book-list;
+}
+
+.btn-read-book:hover {
+    outline: white solid 2px;
+}
+
+.btn-edit:hover {
+    outline: white solid 2px;
+}
+
+.btn-delete:hover {
+    outline: white solid 2px;
+}
+
+.btn-delete {
+    background: helpers.$red;
+    @include btn-book-list;
+}
+
+.btn-edit {
+    background: helpers.$purple;
+    @include btn-book-list;
+}

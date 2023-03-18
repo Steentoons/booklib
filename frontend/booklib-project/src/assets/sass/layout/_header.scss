@@ -1,0 +1,32 @@
+@use '../helpers/variables';
+.header_layout {
+    width: 100%;
+    padding: 0 30px;
+    height: 3.75em;
+    position: fixed;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: variables.$white;
+    color: variables.$purple;
+    nav {
+        height: 100px;
+    }
+    ul {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: flex-end;
+        height: 100%;
+        align-items: center;
+    }
+    li {
+        list-style: none;
+        cursor: pointer;
+        padding: 10px;
+    }
+    li:hover {
+        border-bottom: solid variables.$yellow 3px;
+    }
+}
