@@ -30,9 +30,10 @@
 }
 
 .book-cover {
-    width: 7.5rem;
-    height: 9.4688rem;
+    width: 9.375rem;
+    height: 14.2044rem;
     background: helpers.$purple_dark;
+    flex-shrink: 0;
 }
 
 .book-info-layout {
@@ -69,7 +70,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    padding-top: 20px;
+    padding-top: 70px;
     width: calc(100%)
 }
 
@@ -90,5 +91,63 @@
     padding: 1.875rem;
     h2 {
         text-align: center;
+    }
+}
+
+.floating-filter-layout {
+    position: relative;
+    width: 0;
+    height: 0;
+    .floating-filter-div {
+        position: absolute;
+        width: 180px;
+        background: helpers.$purple;
+        padding: 1.25rem 0;
+        border-radius: 1.25rem;
+        margin-left: -10.9375rem;
+        margin-top: 3.125rem;
+        li {
+            width: 100%;
+            padding: .625rem 0;
+            cursor: pointer;
+            list-style: none;
+            text-align: center;
+        }
+        li:hover {
+            background: helpers.$purple_dark;
+        }
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .dashboard {
+        background: helpers.$purple_dark;
+        width: 100%;
+        padding: 1.25rem 1.25rem;
+        border-radius: 0;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .book-buttons-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        padding-top: 1.25rem;
+        button {
+            width: 100%;
+        }
+    }
+    .book-cover {
+        width: 9.375rem;
+        height: 14.2044rem;
+        background: helpers.$purple_dark;
+        flex-shrink: 0;
+    }
+    .search-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 }

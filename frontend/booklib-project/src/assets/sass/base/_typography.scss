@@ -40,3 +40,8 @@
     @include font-bold;
     font-size: 1.25rem;
 }
+
+.type-filter {
+    @include font-regular;
+    font-size: .8125rem;
+}
