@@ -7,7 +7,7 @@
 }
 
 .btn-primary:hover {
-    border: solid helpers.$white 1px;
+    outline: solid helpers.$white 2px;
 }
 
 .btn-hidden {
@@ -28,6 +28,7 @@
     background: helpers.$yellow;
     color: helpers.$purple;
     @include btn-book-list;
+    flex-shrink: 0;
 }
 
 .btn-read-book:hover {
@@ -50,4 +51,9 @@
 .btn-edit {
     background: helpers.$purple;
     @include btn-book-list;
+}
+
+.search-floating-btn {
+    position: absolute;
+    margin-left: -1.25rem;
 }

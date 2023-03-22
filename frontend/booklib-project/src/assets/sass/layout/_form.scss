@@ -31,21 +31,6 @@
             }
         }
     }
-    .form-input-layout {
-        width: 100%;
-        padding: .625rem;
-        background: helpers.$semi_purple;
-        border: none;
-        border-radius: 5px;
-        color: helpers.$white;
-        text-align: center;
-    }
-    .form-input-layout:hover {
-        border: solid helpers.$yellow 1px;
-    }
-    .form-input-layout:focus {
-        border: solid helpers.$yellow 1px;
-    }
     .form-select-layout {
         cursor: pointer;
         border-right: solid helpers.$yellow 10px;
@@ -61,4 +46,27 @@
         margin-top: 1.25rem;
         padding: 0 2.5rem;
     }
+}
+
+.form-input-layout {
+    width: 100%;
+    padding: .625rem;
+    background: helpers.$semi_purple;
+    border: none;
+    border-radius: 5px;
+    color: helpers.$white;
+    text-align: center;
+}
+
+.form-input-layout:hover {
+    outline: solid helpers.$yellow 1px;
+}
+
+.form-input-layout:focus {
+    outline: solid helpers.$yellow 1px;
+}
+
+.search-form {
+    width: 100%;
+    display: flex;
 }
