@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { User } from "../App";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export interface FormFieldsProps {
     name: string;
@@ -11,19 +14,46 @@ interface FormProps {
     fields: FormFieldsProps[];
     type: string;
     title: string;
+    user: User | null;
+    setUser: (user: User | null) => void;
 }
 
-const Form = ({ fields, type, title }: FormProps) => {
+const Form = ({ fields, type, title, user, setUser }: FormProps) => {
+    useEffect(() => {
+        const navigate = useNavigate()
+        if (user !== null) {
+            navigate("/")
+        }
+    })
     const printInputs = fields.map((field, idx) => {
         return <input key={idx} className="form-input-layout" type={field.type} placeholder={field.placeholder} />
     })
+
+    // @ts-ignore
+    const login=(e)=>{
+        e.preventDefault()
+        axios.post('http://localhost:3000/api/authentication/login', {
+            email: 'genius2@gmail.com',
+            password: 'Password1'
+        }, {withCredentials: true})
+            .then(res => {
+                if(res.status === 200) {
+                    console.log(res.data)
+                    setUser(res.data.data)
+                } else {
+                    console.log(res)
+                }
+            })
+    }
+
     return (
         <div className="form-wrapper-layout">
             <div className="form-layout">
                 <form className="font-regular" >
                     <h2 className="type-form-title">{title}</h2>
                     {printInputs}
-                    {type === 'addBook' ?
+                    {/* {type === 'addBook' ? */}
+                    {type === '' ?
                         (
                             <>
                                 <div className="input-layout">
@@ -38,7 +68,7 @@ const Form = ({ fields, type, title }: FormProps) => {
                         )
                         :
                         (
-                            <button className="btn-primary secondary btn-full">Login</button>
+                            <button onClick={(e) => login(e)} className="btn-primary secondary btn-full">Login</button>
                         )}
                 </form>
                 {

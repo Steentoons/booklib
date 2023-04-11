@@ -119,6 +119,17 @@
     }
 }
 
+.not-found {
+    width: 50%;
+    padding-top: 5rem;
+    display: flex;
+    justify-content: center;
+    margin-inline: auto;
+    img {
+        width: 100%;
+    }
+}
+
 @media screen and (max-width: 850px) {
     .dashboard {
         background: helpers.$purple_dark;
@@ -149,5 +160,15 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+    .not-found {
+        width: 90%;
+        padding-top: 5rem;
+        display: flex;
+        justify-content: center;
+        margin-inline: auto;
+        img {
+            width: 100%;
+        }
     }
 }
