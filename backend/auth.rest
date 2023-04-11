@@ -8,7 +8,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/books
-Authentication: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdlbml1czJAZ21haWwuY29tIiwiaWF0IjoxNjc3MTQ3NzIzLCJleHAiOjE2NzcxNDc3NDh9.p5zVQ1zOFec0Zv-cP_vusnsCjRl8ewmuEDzgCx14S28
+Authentication: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdlbml1czJAZ21haWwuY29tIiwiaWF0IjoxNjgwOTQ4ODAyLCJleHAiOjE2ODA5NDg4MjJ9.WUWRSV6GRk8fcWIb1yVgs_BdvBOSvX0br1TZncJS198
 # Content-Type: application/json
 # Authentication: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikx1dGhlciIsImlhdCI6MTY3Njg5MzIwOX0.N72RNmc6r-hWCGGwpyHJapIvhWi2mHdWaEOWBQ2CdFo
 
@@ -19,7 +19,7 @@ Content-Type: application/json
 {
     "email": "genius2@gmail.com",
     "password": "Password1",
-    "name": "steen"
+    "name": "steentoons"
 }
 
 ###
@@ -30,7 +30,7 @@ POST http://localhost:3000/api/token
 Content-Type: application/json
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdlbml1czJAZ21haWwuY29tIiwiaWF0IjoxNjc3MTQ3NjIwfQ.3Afma6AglgfauUlMFXomPGPx0gKNkse181tGUKCgvNU"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdlbml1czJAZ21haWwuY29tIiwiaWF0IjoxNjgwOTQ4MTk2fQ.ZHOlUKyepxUnHZnzdKJuW_BUSlQlbIE24uRTriJkGbM"
 }
 
 ###
@@ -38,7 +38,7 @@ DELETE http://localhost:3000/api/authentication/logout
 Content-Type: application/json
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imdlbml1czJAZ21haWwuY29tIiwiaWF0IjoxNjc3MTQ3NjIwfQ.3Afma6AglgfauUlMFXomPGPx0gKNkse181tGUKCgvNU"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikx1dGhlciIsImlhdCI6MTY3Njg5MzIwOX0.N72RNmc6r-hWCGGwpyHJapIvhWi2mHdWaEOWBQ2CdFo"
 }
 
 ###

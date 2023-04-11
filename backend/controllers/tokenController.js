@@ -17,16 +17,13 @@ const refreshToken = async(req, res) => {
     // const isRefreshTokenExist = await RefreshToken.exists({ token: refToken })
     const savedTokenObj = await RefreshToken.findOne()
     const savedToken = savedTokenObj.refreshToken
-    console.log(savedToken)
     if (!savedToken.includes(refToken)) {
-        console.log('There is no such refresh token...')
         return res.status(403).json({ error: 'Access Denied' })
     }
 
     // Verify the refresh token...
     jwt.verify(refToken, process.env.JSON_REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) {
-            console.log('The token exists but there was a problem creating access...')
             return res.status(403).json({ error: 'Access Denied' })
         }
 

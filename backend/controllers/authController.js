@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const User = require('../models/userModel')
 const generateToken = require('../helpers/generateToken')
 const RefreshToken = require('../models/refreshTokenModel')
+const dayjs = require('dayjs')
 
 /* 
     method POST
@@ -22,6 +23,8 @@ const login = async(req, res) => {
 
     // Call to the database and hashing password...
     const isEmailExist = await User.exists({ email: email })
+    const userObj = await User.findOne({ email: email })
+    const name = userObj.name
     if (!isEmailExist) {
         return res.status(400).json({ error: 'Email does not exist' })
     }
@@ -38,11 +41,12 @@ const login = async(req, res) => {
         email: email
     }
 
+    // Generating Token
     const token = generateToken(user)
     const refreshToken = jwt.sign(user, process.env.JSON_REFRESH_TOKEN_SECRET)
     const savedTokens = await RefreshToken.findOne()
 
-    if (savedTokens === null) {
+    if (!savedTokens) {
         RefreshToken.create({ refreshToken: [refreshToken] })
     } else {
         try {
@@ -56,7 +60,22 @@ const login = async(req, res) => {
     // const updateRefreshToken = await RefreshToken.updateOne({ refreshToken: [...savedTokens.refreshToken, refreshToken] })
     // console.log(updateRefreshToken)
     // Get the token back to the user...
-    res.status(200).json({ message: 'Login was successiful', token: token, refreshtoken: refreshToken })
+    const tokenData = {
+        token: token,
+        refreshToken: refreshToken
+    }
+    res.cookie('tokenData', JSON.stringify(tokenData), {
+        httpOnly: true,
+        expires: dayjs().add(15, 'minutes').toDate()
+    })
+    res.status(200).json({
+        message: 'Login was successiful',
+        data: {
+            email: email,
+            name: name
+        },
+        token: tokenData
+    })
 }
 
 /* 
@@ -72,6 +91,7 @@ const logout = async(req, res) => {
     try {
         savedRefreshTokenObj.refreshToken = newRefreshToken
         savedRefreshTokenObj.save()
+        res.cookie('tokenData', '')
         res.status(204).json({ message: "You were successifully logged out" })
     } catch (error) {
         return res.status(503).json({ error: 'Could not logout' })

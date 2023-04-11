@@ -1,12 +1,14 @@
 const jwt = require('jsonwebtoken')
 const verifyToken = (req, res, next) => {
     // Verify if the token is valid...
-    const HeaderToken = req.headers['authentication']
+    const HeaderToken = req.headers['authorization']
     if (!HeaderToken) {
         return res.status(400).json({ error: 'No token was provided' })
     }
 
     const token = HeaderToken.split(' ')[1]
+        // const token = HeaderToken
+
     if (!token) {
         return res.status(400).json({ error: 'No token was provided' })
     }
