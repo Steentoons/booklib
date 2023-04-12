@@ -66,7 +66,7 @@ function App() {
   const [fieldsState, setFieldsState] = useState<FormFieldsProps[]>(addBookfields)
   return (
     <div className="type-normal">
-      <Header />
+      <Header setUser={setUser} />
       <Routes>
         <Route path="/login" element={<Form fields={fieldsState} type='addBook' title='Add a book' user={user} setUser={setUser} />} />
         <Route path="/" element={<Library user={user} setUser={setUser} />} />

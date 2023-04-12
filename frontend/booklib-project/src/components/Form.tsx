@@ -19,8 +19,8 @@ interface FormProps {
 }
 
 const Form = ({ fields, type, title, user, setUser }: FormProps) => {
+    const navigate = useNavigate()
     useEffect(() => {
-        const navigate = useNavigate()
         if (user !== null) {
             navigate("/")
         }

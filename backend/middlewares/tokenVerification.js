@@ -1,26 +1,36 @@
 const jwt = require('jsonwebtoken')
+const refreshToken = require('../helpers/refreshToken')
 const verifyToken = (req, res, next) => {
-    // Verify if the token is valid...
-    const HeaderToken = req.headers['authorization']
-    if (!HeaderToken) {
-        return res.status(400).json({ error: 'No token was provided' })
-    }
+    console.log("This is where all token verification takes place")
+    console.log(req.cookies.accessToken)
 
-    const token = HeaderToken.split(' ')[1]
+    let token = req.cookies.accessToken
         // const token = HeaderToken
 
     if (!token) {
-        return res.status(400).json({ error: 'No token was provided' })
+        // Try to refresh the token...
+        const newToken = refreshToken(req.cookies.refreshToken)
+
+        if (!newToken) {
+            req.refreshTokenFailed = true
+        } else {
+            token = newToken
+        }
     }
     jwt.verify(token, process.env.JSON_TOKEN_SECRET, (err, user) => {
         if (err) {
-            return res.status(403).json({ error: 'Access denied' })
+            if (req.tokenRefreshFailed) {
+                res.status(403).json({ error: "Access Denied" })
+            }
+        } else {
+            req.user = user
         }
 
-        req.user = user
     })
 
-    next()
+    if (!req.tokenRefreshFailed) {
+        next()
+    }
 }
 
 module.exports = verifyToken
