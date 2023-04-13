@@ -17,7 +17,7 @@ POST http://localhost:3000/api/register
 Content-Type: application/json
 
 {
-    "email": "genius2@gmail.com",
+    "email": "genius3@gmail.com",
     "password": "Password1",
     "name": "steentoons"
 }
@@ -46,3 +46,4 @@ Content-Type: application/json
 GET http://localhost:3000/api/token
 
 ###
+POST http://localhost:3000/api/books

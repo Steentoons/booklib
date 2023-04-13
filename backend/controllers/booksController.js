@@ -26,7 +26,6 @@ const getBooks = (req, res) => {
 */
 const postBooks = (req, res, next) => {
     const { title, author, year, category } = req.body;
-    const { cover_image, file } = req.files;
     if (!title) {
         return res.status(400).json({ error: "The title field cannot be empty" });
     } else if (!author) {
@@ -39,13 +38,15 @@ const postBooks = (req, res, next) => {
         return res
             .status(400)
             .json({ error: "The category field cannot be empty" });
-    } else if (!cover_image) {
+    } else if (!req.files) {
         return res
             .status(400)
             .json({ error: "The cover image field is empty or invalid file type" });
-    } else if (!file) {
+    } else if (!req.files.file) {
         return res.status(400).json({ error: "The file field is empty or invalid file type" });
     }
+
+    const { cover_image, file } = req.files;
 
     Category.exists({ _id: req.body.category }).then((category) => {
         if (!category) {

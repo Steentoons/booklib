@@ -22,7 +22,7 @@ const addUser = async(req, res) => {
     // Checking email duplicates...
     const isEmailExist = await User.exists({ email: email })
     if (isEmailExist) {
-        return res.status(400).json({ message: 'The email already exists' })
+        return res.status(400).json({ error: 'The email already exists' })
     }
 
     // Adding user to database...

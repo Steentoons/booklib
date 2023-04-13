@@ -48,7 +48,8 @@
     }
 }
 
-.form-input-layout {
+.form-input-layout,
+.dropdown-input {
     width: 100%;
     padding: .625rem;
     background: helpers.$semi_purple;
@@ -56,6 +57,11 @@
     border-radius: 5px;
     color: helpers.$white;
     text-align: center;
+}
+
+.dropdown-input {
+    cursor: pointer;
+    border-right: solid helpers.$yellow 5px;
 }
 
 .form-input-layout:hover {
