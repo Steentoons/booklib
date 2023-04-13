@@ -42,6 +42,8 @@ const postBooks = (req, res, next) => {
         return res
             .status(400)
             .json({ error: "The cover image field is empty or invalid file type" });
+    } else if (!req.files.cover_image) {
+        return res.status(400).json({ error: "The cover image field is empty or invalid file type" });
     } else if (!req.files.file) {
         return res.status(400).json({ error: "The file field is empty or invalid file type" });
     }
