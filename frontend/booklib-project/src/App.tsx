@@ -44,7 +44,7 @@ function App() {
       <Header setUser={setUser} />
       <Routes>
         <Route path="/login" element={<Form fields={fieldsState} type='addBook' title='Add a book' user={user} setUser={setUser} />} />
-        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/register" element={<RegisterForm setUser={setUser} />} />
         <Route path="/add-book" element={<AddBookForm />} />
         <Route path="/" element={<Library user={user} setUser={setUser} />} />
         <Route path="*" element={<NotFound />} />

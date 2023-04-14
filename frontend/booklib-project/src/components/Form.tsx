@@ -6,6 +6,7 @@ import { loginFields } from "../data/form-fields";
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useLoginHook } from "../hooks/useLoginHook";
 
 export interface FormFieldsProps {
     name: string;
@@ -51,16 +52,7 @@ const Form = ({ fields, type, title, user, setUser }: FormProps) => {
     const login = (data) => {
         console.log(data)
         if (data.email && data.password) {
-            axios.post('http://localhost:3000/api/authentication/login', data, { withCredentials: true })
-                .then(res => {
-                    if (res.status === 200) {
-                        console.log(res.data)
-                        setUser(res.data.data)
-                    }
-                })
-                .catch(err => {
-                    console.log('There was an error when trying to login')
-                })
+            useLoginHook(data, setUser)
         }
     }
 

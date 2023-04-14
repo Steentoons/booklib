@@ -14,7 +14,7 @@ const addUser = async(req, res) => {
     } else if (!password) {
         return res.status(400).json({ error: 'The password field is required' })
     } else if (!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$/.test(password)) {
-        return res.status(400).json({ error: 'Minimum eight characters, at least one letter and one number' })
+        return res.status(400).json({ error: 'Minimum eight characters, at least one capital letter and one number' })
     } else if (!name) {
         return res.status(400).json({ error: 'The name field is required' })
     }

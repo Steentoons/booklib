@@ -25,11 +25,12 @@ const login = async(req, res) => {
 
     // Call to the database and hashing password...
     const isEmailExist = await User.exists({ email: email });
-    const userObj = await User.findOne({ email: email });
-    const name = userObj.name;
     if (!isEmailExist) {
         return res.status(400).json({ error: "Email does not exist" });
     }
+    const userObj = await User.findOne({ email: email });
+
+    const name = userObj.name;
     const savedUser = await User.findOne({ email: email });
     const isMatch = await bcrypt.compare(password, savedUser.password);
 
