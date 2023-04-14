@@ -3,6 +3,9 @@ import { User } from "../App";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { loginFields } from "../data/form-fields";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 export interface FormFieldsProps {
     name: string;
@@ -20,42 +23,68 @@ interface FormProps {
     setUser: (user: User | null) => void;
 }
 
+// const schema = yup.object({
+//     email: yup.string().required('Please enter your email'),
+//     password: yup.string().required('Please enter your password'),
+// }).required()
+
+const schema = yup.object().shape({
+    email: yup
+        .string()
+        .email("Please enter a valid email address")
+        .required('Please enter your email'),
+    password: yup
+        .string()
+        .required('Please enter your password')
+})
+
+
+type FormData = yup.InferType<typeof schema>;
+
 const Form = ({ fields, type, title, user, setUser }: FormProps) => {
+
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+        resolver: yupResolver(schema)
+    })
+
+    // @ts-ignore
+    const login = (data) => {
+        console.log(data)
+        if (data.email && data.password) {
+            axios.post('http://localhost:3000/api/authentication/login', data, { withCredentials: true })
+                .then(res => {
+                    if (res.status === 200) {
+                        console.log(res.data)
+                        setUser(res.data.data)
+                    }
+                })
+                .catch(err => {
+                    console.log('There was an error when trying to login')
+                })
+        }
+    }
+
     const navigate = useNavigate()
     useEffect(() => {
         if (user !== null) {
             navigate("/")
         }
     })
-    const printInputs = loginFields.map((field, idx) => {
-        return <input key={idx} className="form-input-layout" type={field.type} placeholder={field.placeholder} />
-    })
-
-    // @ts-ignore
-    const login = (e) => {
-        e.preventDefault()
-        axios.post('http://localhost:3000/api/authentication/login', {
-            email: 'genius2@gmail.com',
-            password: 'Password1'
-        }, { withCredentials: true })
-            .then(res => {
-                if (res.status === 200) {
-                    console.log(res.data)
-                    setUser(res.data.data)
-                } else {
-                    console.log(res)
-                }
-            })
-    }
+    // const printInputs = loginFields.map((field, idx) => {
+    //     return <input key={idx} className="form-input-layout" type={field.type} placeholder={field.placeholder} />
+    // })
 
     return (
         <div className="form-wrapper-layout">
             <div className="form-layout">
-                <form className="font-regular" >
+                <form onSubmit={handleSubmit(login)} className="font-regular" >
                     <h2 className="type-form-title">Sign In to Booklib</h2>
-                    {printInputs}
+                    <input type='email' {...register('email')} autoComplete="off" className="form-input-layout" placeholder='Enter your email' />
+                    {errors.email && <p className="error-input">{errors.email?.message}</p>}
+                    <input type='password' {...register('password')} autoComplete="off" className="form-input-layout" placeholder='Enter your password' />
+                    {errors.password && <p className="error-input">{errors.password?.message}</p>}
                     <div className="input-layout">
-                        <button onClick={(e) => login(e)} className="btn-primary secondary btn-full">Login</button>
+                        <button type="submit" className="btn-primary secondary btn-full">Login</button>
                     </div>
                 </form>
             </div>
