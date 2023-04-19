@@ -10,7 +10,7 @@ const router = express.Router()
 const uploadBook = multer({ storage: storage, fileFilter: uploadFilter })
 
 // Handle routes...
-router.get("/", getBooks);
+router.get("/", verifyToken, getBooks);
 
 router.post("/",
     verifyToken,

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { User } from "../App";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { loginFields } from "../data/form-fields";
 import { useForm } from 'react-hook-form';
@@ -79,6 +79,9 @@ const Form = ({ fields, type, title, user, setUser }: FormProps) => {
                         <button type="submit" className="btn-primary secondary btn-full">Login</button>
                     </div>
                 </form>
+                <div className="input-layout read-book-layout">
+                    <Link to='/register'><button className="btn-primary tertiary btn-full">Sign in</button></Link>
+                </div>
             </div>
         </div>
     );

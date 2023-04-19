@@ -23,13 +23,21 @@ const Header = ({setUser}: HeaderProps) => {
     const logout = () => {
         axios.delete('http://localhost:3000/api/authentication/logout', {withCredentials: true})
             .then(res => {
-                console.log('Progress on the logging in thingie')
+                console.log('Progress on the logging out thingie')
                 if (res.status === 204) {
                     setUser(null)
                     console.log("You were logged out successifully")
                     return
                 }
-
+            })
+            .catch(err => {
+                if(err.response) {
+                    console.log(err.response.data.error)
+                    console.log(err.response.status)
+                    if(err.response.status === 403) {
+                        setUser(null)
+                    }
+                }
                 console.log("There was a problem when logging out")
             })
     }

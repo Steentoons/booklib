@@ -88,19 +88,24 @@ const login = async(req, res) => {
 */
 const logout = async(req, res) => {
     // if (!req.body.token) return res.status(400)
-    console.log("this is the token that gets to logout");
-    console.log(req.cookies.refreshToken);
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
         return res
-            .status(400)
+            .status(403)
             .json({ error: "There was a problem when trying to logout" });
     } else {
         const savedRefreshTokenObj = await RefreshToken.findOne();
+        if (!savedRefreshTokenObj) {
+            return res.status(403).json({ error: 'Forbidden' })
+        }
+
         const savedRefreshToken = savedRefreshTokenObj.refreshToken;
+        if (!savedRefreshToken) {
+            return res.status(403).json({ error: 'Forbidden' })
+        }
         const newRefreshToken = savedRefreshToken.filter(
-            (token) => token !== refreshToken
+            (token) => token === refreshToken
         );
 
         try {
@@ -115,8 +120,6 @@ const logout = async(req, res) => {
                 .status(204)
                 .json({ message: "You were successfully logged out" });
         } catch (error) {
-            console.log("error");
-            console.log(error);
             return res.status(503).json({ error: "Could not logout" });
         }
     }

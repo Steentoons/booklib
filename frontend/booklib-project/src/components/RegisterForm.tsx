@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
 import { useLoginHook } from '../hooks/useLoginHook'
 import { User } from '../App'
+import { Link } from 'react-router-dom'
 
 const schema = yup.object().shape({
     email: yup
@@ -85,6 +86,9 @@ const RegisterForm = ({setUser}: RegisterFormProps) => {
                     {errors.confirmPassword && <p className="error-input">{errors.confirmPassword?.message}</p>}
                     <button className="btn-primary secondary btn-full">Sign Up</button>
                 </form>
+                <div className="input-layout read-book-layout">
+                    <Link to='/login'><button className="btn-primary tertiary btn-full">Sign in</button></Link>
+                </div>
             </div>
         </div>
     )

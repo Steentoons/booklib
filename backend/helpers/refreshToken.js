@@ -1,33 +1,49 @@
-const RefreshToken = require('../models/refreshTokenModel')
-const jwt = require('jsonwebtoken')
-const generateToken = require('../helpers/generateToken')
+const RefreshToken = require("../models/refreshTokenModel");
+const jwt = require("jsonwebtoken");
+const generateToken = require("../helpers/generateToken");
 
-const refreshToken = async(refToken) => {
-    // const refToken = req.body.refreshToken
+const refreshToken = async(refTokenQuotes) => {
     // Validate the inputs...
-    if (!refToken) {
-        return undefined
+    if (!refTokenQuotes) {
+        return undefined;
     }
+    const refToken = refTokenQuotes.replace(/^"(.*)"$/, '$1')
 
-    // Get refresh tokens from the database...
-    // const isRefreshTokenExist = await RefreshToken.exists({ token: refToken })
-    const savedTokenObj = await RefreshToken.findOne()
-    const savedToken = savedTokenObj.refreshToken
-    if (!savedToken.includes(refToken)) {
-        return undefined
-    }
+    try {
+        // Get refresh tokens from the database...
+        const savedTokenObj = await RefreshToken.findOne();
 
-    // Verify the refresh token...
-    const newToken = jwt.verify(refToken, process.env.JSON_REFRESH_TOKEN_SECRET, (err, user) => {
-        if (err) {
+        console.log(refToken)
+        if (!savedTokenObj) {
             return undefined
         }
 
-        const accessToken = generateToken({ email: user.email })
-        return accessToken
-    })
+        const savedToken = savedTokenObj.refreshToken;
+        if (!savedToken.includes(refToken)) {
+            return undefined;
+        }
+    } catch (err) {
+        return undefined
+    }
 
-    return newToken
-}
+    // Try to refresh the token...
+    try {
+        const newToken = await jwt.verify(
+            refToken,
+            process.env.JSON_REFRESH_TOKEN_SECRET,
+            async(err, user) => {
+                if (err) {
+                    return undefined;
+                } else {
+                    const accessToken = await generateToken({ email: user.email });
+                    return accessToken;
+                }
+            }
+        );
+        return newToken;
+    } catch (err) {
+        return undefined;
+    }
+};
 
-module.exports = refreshToken
+module.exports = refreshToken;
