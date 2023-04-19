@@ -14,7 +14,22 @@ interface LibraryProps {
     setUser: (user: User) => void;
 }
 
+interface BooksType {
+    __v: number;
+    _id: string;
+    author: string;
+    category: string;
+    cover_image: string;
+    file: string;
+    title: string;
+    user: string;
+    year: string;
+}
+
 const Library = ({ user, setUser }: LibraryProps) => {
+
+    const [books, setBooks] = useState<BooksType[] | []>([])
+
     const navigate = useNavigate()
     useEffect(() => {
         console.log(`The user is ${user}`)
@@ -26,6 +41,8 @@ const Library = ({ user, setUser }: LibraryProps) => {
                 .then(res => {
                     console.log(res.status)
                     if(res.status === 200) {
+
+                        setBooks([...res.data.books])
                         console.log('These are the fetched books')
                         console.log(res.data.books)
                     }
@@ -41,6 +58,10 @@ const Library = ({ user, setUser }: LibraryProps) => {
         }
     }, [user])
 
+    const printBooks = books.map((book, idx) => {
+        return <Book key={idx} />
+    })
+
     return (<section className='dashboard-layout'>
         <div className='dashboard'>
             <div className='library-title-layout'>
@@ -49,9 +70,7 @@ const Library = ({ user, setUser }: LibraryProps) => {
             <div className="search-layout">
                 <Search />
             </div>
-            <Book />
-            <Book />
-            <Book />
+            {printBooks}
         </div>
     </section>
     )
