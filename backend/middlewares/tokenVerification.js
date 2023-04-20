@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const refreshToken = require("../helpers/refreshToken");
 const verifyToken = async(req, res, next) => {
+
     if (!req.cookies.accessToken) {
         // Try to refresh the token...
         try {
@@ -8,6 +9,7 @@ const verifyToken = async(req, res, next) => {
                 req.refreshTokenFailed = true;
             } else {
                 const newToken = await refreshToken(req.cookies.refreshToken);
+
                 if (!newToken) {
                     req.refreshTokenFailed = true;
                 } else {

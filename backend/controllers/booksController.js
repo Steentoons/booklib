@@ -1,7 +1,7 @@
 const Category = require("../models/categoryModel");
 const Book = require("../models/bookModel");
-const path = require('path')
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 const manageFiles = require("../helpers/manageFiles");
 
 /* 
@@ -9,16 +9,17 @@ const manageFiles = require("../helpers/manageFiles");
     Get the books...
 */
 const getBooks = (req, res) => {
-    if (req.user) {
-        Book.find({ user: req.user.email })
-            .then((books) => {
-                return res.status(200).json({ books: books });
-            })
-            .catch((err) => {
-                return res.status(500).json({ error: err });
-            });
+    if (!req.user) {
+        return res.status(400).json({ error: "There was a problem when getting them books" })
     }
-}
+    Book.find({ user: req.user.email })
+        .then((books) => {
+            return res.status(200).json({ books: books });
+        })
+        .catch((err) => {
+            return res.status(500).json({ error: err });
+        });
+};
 
 /* 
     Method POST
@@ -29,9 +30,7 @@ const postBooks = (req, res, next) => {
     if (!title) {
         return res.status(400).json({ error: "The title field cannot be empty" });
     } else if (!author) {
-        return res
-            .status(400)
-            .json({ error: "The author field cannot be empty" });
+        return res.status(400).json({ error: "The author field cannot be empty" });
     } else if (!year) {
         return res.status(400).json({ error: "The year field cannot be empty" });
     } else if (!category) {
@@ -43,9 +42,13 @@ const postBooks = (req, res, next) => {
             .status(400)
             .json({ error: "The cover image field is empty or invalid file type" });
     } else if (!req.files.cover_image) {
-        return res.status(400).json({ error: "The cover image field is empty or invalid file type" });
+        return res
+            .status(400)
+            .json({ error: "The cover image field is empty or invalid file type" });
     } else if (!req.files.file) {
-        return res.status(400).json({ error: "The file field is empty or invalid file type" });
+        return res
+            .status(400)
+            .json({ error: "The file field is empty or invalid file type" });
     }
 
     const { cover_image, file } = req.files;
@@ -57,15 +60,21 @@ const postBooks = (req, res, next) => {
             });
         }
 
+        // Extracting the filenames from paths
+        const fileName = path.basename(file[0].path);
+        const imageName = path.basename(cover_image[0].path);
+
+        console.log(fileName, imageName);
+
         // Updating the shema
         const bookObj = {
             title: req.body.title,
             author: req.body.author,
             year: req.body.year,
             category: req.body.category,
-            cover_image: cover_image[0].path,
-            file: file[0].path,
-            user: req.user.email
+            cover_image: imageName,
+            file: fileName,
+            user: req.user.email,
         };
         const book = new Book(bookObj);
 
@@ -89,7 +98,7 @@ const postBooks = (req, res, next) => {
                 return res.status(400).json({ err });
             });
     });
-}
+};
 
 /* 
     Method PUT
@@ -100,9 +109,7 @@ const putBooks = async(req, res, next) => {
     if (!title) {
         return res.status(400).json({ error: "The title field cannot be empty" });
     } else if (!author) {
-        return res
-            .status(400)
-            .json({ error: "The author field cannot be empty" });
+        return res.status(400).json({ error: "The author field cannot be empty" });
     } else if (!year) {
         return res.status(400).json({ error: "The year field cannot be empty" });
     } else if (!category) {
@@ -114,7 +121,9 @@ const putBooks = async(req, res, next) => {
             .status(400)
             .json({ error: "The cover image field is empty or invalid file type" });
     } else if (!req.files.file) {
-        return res.status(400).json({ error: "The file field is empty or invalid file type" });
+        return res
+            .status(400)
+            .json({ error: "The file field is empty or invalid file type" });
     }
 
     const { cover_image, file } = req.files;
@@ -126,13 +135,13 @@ const putBooks = async(req, res, next) => {
         category: category,
         cover_image: cover_image[0].path,
         file: file[0].path,
-        user: req.user.email
+        user: req.user.email,
     };
 
-    const oldBook = await Book.findById(req.params.id)
+    const oldBook = await Book.findById(req.params.id);
 
     // Remove the duplicates module...
-    manageFiles(oldBook.cover_image, oldBook.file)
+    manageFiles(oldBook.cover_image, oldBook.file);
 
     Book.updateOne({ _id: req.params.id }, newBook, (err, book) => {
         if (err) {
@@ -145,7 +154,7 @@ const putBooks = async(req, res, next) => {
                 .json({ message: "The book was updated successifully", data: book });
         }
     });
-}
+};
 
 /* 
     Method DELETE
@@ -153,29 +162,31 @@ const putBooks = async(req, res, next) => {
 */
 const deleteBooks = async(req, res) => {
     // Validate the request...
-    const booksExists = await Book.exists({ _id: req.params.id })
+    const booksExists = await Book.exists({ _id: req.params.id });
     if (!booksExists) {
-        return res.status(400).json({ error: "Could not find book with that id" })
+        return res.status(400).json({ error: "Could not find book with that id" });
     }
 
     // Delete file data associated with the book...
-    const oldBook = await Book.findById(req.params.id)
+    const oldBook = await Book.findById(req.params.id);
 
     // Remove the duplicates module...
-    manageFiles(oldBook.cover_image, oldBook.file)
+    manageFiles(oldBook.cover_image, oldBook.file);
 
     // Delete the category...
     try {
-        const deletedBook = await Book.deleteOne({ _id: req.params.id })
-        res.status(200).json({ message: "Book deleted successifully", data: deletedBook })
+        const deletedBook = await Book.deleteOne({ _id: req.params.id });
+        res
+            .status(200)
+            .json({ message: "Book deleted successifully", data: deletedBook });
     } catch (err) {
-        res.status(500).json({ error: "Could not delete book" })
+        res.status(500).json({ error: "Could not delete book" });
     }
-}
+};
 
 module.exports = {
     getBooks,
     putBooks,
     postBooks,
-    deleteBooks
-}
+    deleteBooks,
+};

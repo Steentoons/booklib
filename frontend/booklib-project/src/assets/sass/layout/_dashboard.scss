@@ -34,6 +34,11 @@
     height: 14.2044rem;
     background: helpers.$purple_dark;
     flex-shrink: 0;
+    display: flex;
+    img {
+        width: 100%;
+        align-items: center;
+    }
 }
 
 .book-info-layout {

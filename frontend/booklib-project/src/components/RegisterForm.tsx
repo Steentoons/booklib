@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import axios from 'axios'
 import { FormFieldsProps } from './Form'
 import { registerFields } from '../data/form-fields'
@@ -6,8 +6,8 @@ import {useForm} from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
 import { useLoginHook } from '../hooks/useLoginHook'
-import { User } from '../App'
 import { Link } from 'react-router-dom'
+import { MyContext } from './MyContextProvider'
 
 const schema = yup.object().shape({
     email: yup
@@ -28,11 +28,9 @@ const schema = yup.object().shape({
 })
 type FormData = yup.InferType<typeof schema>;
 
-interface RegisterFormProps {
-    setUser: (user: User | null) => void
-}
+const RegisterForm = () => {
 
-const RegisterForm = ({setUser}: RegisterFormProps) => {
+    const {setUser, setBooks} = useContext(MyContext)
 
     const { handleSubmit, register, formState: { errors }} = useForm<FormData>({
         resolver: yupResolver(schema)
@@ -55,7 +53,7 @@ const RegisterForm = ({setUser}: RegisterFormProps) => {
                     if (res.status === 201) {
                         console.log(res.data)
                         console.log(res.data.message)
-                        useLoginHook(data, setUser)
+                        useLoginHook(data, setUser, setBooks)
                     } 
                 })
                 .catch(err => {

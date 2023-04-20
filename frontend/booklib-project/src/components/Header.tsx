@@ -1,11 +1,10 @@
 import axios from "axios";
-import { User } from "../App";
+import { useContext } from "react";
+import { MyContext } from "./MyContextProvider";
 
-interface HeaderProps {
-    setUser: (user: User | null) => void
-}
+const Header = () => {
 
-const Header = ({setUser}: HeaderProps) => {
+    const {setUser} = useContext(MyContext)
 
     const getBooks = () => {
         axios.get('http://localhost:3000/api/books', {withCredentials: true})

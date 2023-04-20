@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { User } from "../App";
+import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { loginFields } from "../data/form-fields";
@@ -7,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useLoginHook } from "../hooks/useLoginHook";
+import { MyContext } from "./MyContextProvider";
 
 export interface FormFieldsProps {
     name: string;
@@ -14,14 +14,6 @@ export interface FormFieldsProps {
     error: string;
     type: string;
     dropdown?: boolean
-}
-
-interface FormProps {
-    fields: FormFieldsProps[];
-    type: string;
-    title: string;
-    user: User | null;
-    setUser: (user: User | null) => void;
 }
 
 // const schema = yup.object({
@@ -42,7 +34,9 @@ const schema = yup.object().shape({
 
 type FormData = yup.InferType<typeof schema>;
 
-const Form = ({ fields, type, title, user, setUser }: FormProps) => {
+const Form = () => {
+
+    const {setUser, setBooks, user} = useContext(MyContext)
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: yupResolver(schema)
@@ -52,7 +46,7 @@ const Form = ({ fields, type, title, user, setUser }: FormProps) => {
     const login = (data) => {
         console.log(data)
         if (data.email && data.password) {
-            useLoginHook(data, setUser)
+            useLoginHook(data, setUser, setBooks)
         }
     }
 
