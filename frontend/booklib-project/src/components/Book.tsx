@@ -1,5 +1,8 @@
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import ReadPdf from '../pages/ReadPdf';
+import { MyContext } from './MyContextProvider';
 
 interface BookProps {
     _id: string;
@@ -20,22 +23,12 @@ const Book = ({
     file,
     title,
     user,
-    year,}: BookProps) => {
+    year, }: BookProps) => {
+    const { setPdfUrl } = useContext(MyContext)
 
-        const readBook = () => {
-            axios.get(`http://localhost:3000/api/media/files/${file}`, {withCredentials: true})
-                .then(res => {
-                    if(res.status === 200) {
-                        console.log(res.data)
-                    }
-                })
-                .catch(err => {
-                    if(err.response) {
-                        console.log(err.response.status)
-                        console.log("there was an error when fetching the file")
-                    }
-                })
-        }
+    const readBook = () => {
+        setPdfUrl(`http://localhost:3000/api/media/files/${file}`)
+    }
 
     return (
         <div className="book-layout">
@@ -50,7 +43,9 @@ const Book = ({
                     <p className='book-year'>{year}</p>
                 </div>
                 <div className='book-buttons-layout'>
-                    <button onClick={() => readBook()} className='btn-read-book'>Read Book</button>
+                    <button
+                        onClick={() => readBook()}
+                        className='btn-read-book'>Read Book</button>
                     <button className='btn-delete'>Delete</button>
                     <button className='btn-edit'>Edit</button>
                 </div>

@@ -23,6 +23,8 @@ interface MyContextType {
     setUser: (user: User | null) => void;
     books: BooksType[] | [];
     setBooks: (books: BooksType[]) => void;
+    pdfUrl: string;
+    setPdfUrl: (url: string) => void;
 }
 
 const MyContext = createContext<MyContextType>({} as MyContextType)
@@ -40,10 +42,11 @@ const MyContextProvider = (props: { children: React.ReactNode }) => {
             return parsedUser
         }
     }
+    const [pdfUrl, setPdfUrl] = useState('');
     const [user, setUser] = useState<User | null>(handleLocalStorage())
     const [books, setBooks] = useState<BooksType[] | []>([])
     return (
-        <MyContext.Provider value={{user, setUser, books, setBooks}}>
+        <MyContext.Provider value={{user, setUser, books, setBooks, pdfUrl, setPdfUrl}}>
             {props.children}
         </MyContext.Provider>
     )

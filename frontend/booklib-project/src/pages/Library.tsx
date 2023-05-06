@@ -52,7 +52,7 @@ const Library = () => {
     return (<section className='dashboard-layout'>
         <div className='dashboard'>
             <div className='library-title-layout'>
-                <h2 className="type-form-title">Available Books</h2>
+                <h2 className="type-form-title">Available Broks</h2>
             </div>
             <div className="search-layout">
                 <Search />

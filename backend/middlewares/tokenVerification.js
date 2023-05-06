@@ -3,7 +3,8 @@ const refreshToken = require("../helpers/refreshToken");
 const verifyToken = async(req, res, next) => {
 
     if (!req.cookies.accessToken) {
-        // Try to refresh the token...
+        console.log('So it goes in here?')
+            // Try to refresh the token...
         try {
             if (!req.cookies.refreshToken) {
                 req.refreshTokenFailed = true;

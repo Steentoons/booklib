@@ -12,8 +12,6 @@ const refreshToken = async(refTokenQuotes) => {
     try {
         // Get refresh tokens from the database...
         const savedTokenObj = await RefreshToken.findOne();
-
-        console.log(refToken)
         if (!savedTokenObj) {
             return undefined
         }

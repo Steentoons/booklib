@@ -2,17 +2,18 @@ import Header from "./components/Header"
 import Form, { FormFieldsProps } from "./components/Form"
 import { createContext, useContext, useEffect, useState } from "react"
 import { addBookfields } from "./data/data"
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, useNavigate } from "react-router-dom"
 import Library from "./pages/Library"
 import NotFound from "./pages/NotFound"
 import RegisterForm from "./components/RegisterForm"
 import AddBookForm from "./components/AddBookForm"
 import {MyContextProvider, MyContext} from "./components/MyContextProvider"
-
-
+import ReadPdf from "./pages/ReadPdf"
+import ReadEpub from "./pages/ReadEpub"
 
 function App() {
-  const {user} = useContext(MyContext)
+  const {user, pdfUrl, setPdfUrl} = useContext(MyContext)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user === null) {
@@ -21,6 +22,12 @@ function App() {
       localStorage.setItem("user", JSON.stringify(user))
     }
   }, [user])
+
+    useEffect(() => {
+        if (pdfUrl) {
+            navigate('/read-pdf', { state: { pdfUrl } });
+        }
+    }, [pdfUrl, navigate]);
   return (
     <div className="type-normal">
       <Header />
@@ -29,6 +36,8 @@ function App() {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/add-book" element={<AddBookForm />} />
         <Route path="/" element={<Library />} />
+        <Route path="/read-pdf" element={<ReadPdf />} />
+        <Route path="/read-epub" element={<ReadEpub />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

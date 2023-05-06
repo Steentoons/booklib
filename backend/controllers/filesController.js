@@ -14,11 +14,13 @@ const getImages = (req, res) => {
 
     // Send back an image to the client...
     const image = path.join(__dirname, "..", "cover-uploads", imageName)
+    res.setHeader('Content-Type', 'application/pdf');
     res.sendFile(image)
 }
 
 const getFiles = (req, res) => {
     const fileName = req.params.name
+    console.log("🚀 ~ file: filesController.js:22 ~ getFiles ~ fileName:", fileName)
 
     if (!fileName) {
         return res.status(400).json({ error: 'There was a problem when fetching the file' })

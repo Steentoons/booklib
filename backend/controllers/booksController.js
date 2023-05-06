@@ -12,11 +12,20 @@ const getBooks = (req, res) => {
     if (!req.user) {
         return res.status(400).json({ error: "There was a problem when getting them books" })
     }
-    Book.find({ user: req.user.email })
+    Book.find({ user: req.user.email }).lean()
         .then((books) => {
-            return res.status(200).json({ books: books });
+
+            const newBooks = books.map((book) => {
+                // create a new object with the properties of the original book
+                const newBook = Object.assign({}, book);
+
+                newBook.fileExt = path.extname(book.file);
+                return newBook;
+            });
+            return res.status(200).json({ books: newBooks });
         })
         .catch((err) => {
+            console.log(err.message)
             return res.status(500).json({ error: err });
         });
 };
@@ -51,7 +60,7 @@ const postBooks = (req, res, next) => {
             .json({ error: "The file field is empty or invalid file type" });
     }
 
-    const { cover_image, file } = req.files;
+    const { cover_image, file } = req.files
 
     Category.exists({ _id: req.body.category }).then((category) => {
         if (!category) {
@@ -63,8 +72,6 @@ const postBooks = (req, res, next) => {
         // Extracting the filenames from paths
         const fileName = path.basename(file[0].path);
         const imageName = path.basename(cover_image[0].path);
-
-        console.log(fileName, imageName);
 
         // Updating the shema
         const bookObj = {

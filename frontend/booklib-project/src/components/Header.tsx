@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useContext } from "react";
 import { MyContext } from "./MyContextProvider";
+import { Link } from "react-router-dom";
 
 const Header = () => {
 
@@ -46,8 +47,8 @@ const Header = () => {
         <nav>
             <ul>
                 {/* <li>Home</li> */}
-                <li className="type-bold">New book</li>
-                <li className="type-bold">New category</li>
+                <Link to='/add-book'><li className="type-bold">New book</li></Link>
+                <Link to='/'><li className="type-bold">New category</li></Link>
                 <li className="type-bold" onClick={() => getBooks()}>Books</li>
                 <li className="type-bold">Categories</li>
                 {/* <li>Login</li> */}
