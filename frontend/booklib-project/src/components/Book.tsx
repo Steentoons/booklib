@@ -13,6 +13,7 @@ interface BookProps {
     title: string;
     user: string;
     year: string;
+    fileExt: string;
 }
 
 const Book = ({
@@ -22,12 +23,19 @@ const Book = ({
     cover_image,
     file,
     title,
+    fileExt,
     user,
     year, }: BookProps) => {
-    const { setPdfUrl } = useContext(MyContext)
+    const { setPdfUrl, setEpubUrl } = useContext(MyContext)
 
     const readBook = () => {
-        setPdfUrl(`http://localhost:3000/api/media/files/${file}`)
+        if(fileExt === '.pdf') {
+            console.log(`http://localhost:3000/api/media/files/${file}`)
+            setPdfUrl(`http://localhost:3000/api/media/files/${file}`)
+        } else if(fileExt === '.epub' || fileExt === '.epub+zip') {
+            console.log(`http://localhost:3000/api/media/files/${file}`)
+            setEpubUrl(`http://localhost:3000/api/media/files/${file}`)
+        }
     }
 
     return (

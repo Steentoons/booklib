@@ -43,7 +43,7 @@ const Library = () => {
     }, [])
 
     const printBooks = books.map((book, idx) => {
-        return <Book key={idx} _id={book._id} title={book.title} author={book.author} category={book.category} cover_image={book.cover_image}
+        return <Book key={idx} _id={book._id} title={book.title} fileExt={book.fileExt} author={book.author} category={book.category} cover_image={book.cover_image}
             file={book.file}
             user={book.user}
             year={book.year} />

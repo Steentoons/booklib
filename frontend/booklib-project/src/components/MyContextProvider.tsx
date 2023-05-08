@@ -16,6 +16,7 @@ export interface BooksType {
     title: string;
     user: string;
     year: string;
+    fileExt: string;
 }
 
 interface MyContextType {
@@ -25,6 +26,8 @@ interface MyContextType {
     setBooks: (books: BooksType[]) => void;
     pdfUrl: string;
     setPdfUrl: (url: string) => void;
+    setEpubUrl: (url: string) => void;
+    epubUrl: string;
 }
 
 const MyContext = createContext<MyContextType>({} as MyContextType)
@@ -35,18 +38,21 @@ const MyContextProvider = (props: { children: React.ReactNode }) => {
         if (userValue === null || userValue.length === 0) {
             return null
         } else {
-
             console.log(userValue)
-            const parsedUser = JSON.parse(userValue)
+            if (userValue === undefined) {
+                return null
+            }
 
+            const parsedUser = JSON.parse(userValue)
             return parsedUser
         }
     }
     const [pdfUrl, setPdfUrl] = useState('');
+    const [epubUrl, setEpubUrl] = useState('');
     const [user, setUser] = useState<User | null>(handleLocalStorage())
     const [books, setBooks] = useState<BooksType[] | []>([])
     return (
-        <MyContext.Provider value={{user, setUser, books, setBooks, pdfUrl, setPdfUrl}}>
+        <MyContext.Provider value={{ user, setUser, books, setBooks, pdfUrl, setPdfUrl, setEpubUrl, epubUrl }}>
             {props.children}
         </MyContext.Provider>
     )

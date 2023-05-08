@@ -9,9 +9,12 @@ const manageFiles = require("../helpers/manageFiles");
     Get the books...
 */
 const getBooks = (req, res) => {
+    console.log("Calling this?")
     if (!req.user) {
         return res.status(400).json({ error: "There was a problem when getting them books" })
     }
+
+    console.log(req.user)
     Book.find({ user: req.user.email }).lean()
         .then((books) => {
 
@@ -46,10 +49,6 @@ const postBooks = (req, res, next) => {
         return res
             .status(400)
             .json({ error: "The category field cannot be empty" });
-    } else if (!req.files) {
-        return res
-            .status(400)
-            .json({ error: "The cover image field is empty or invalid file type" });
     } else if (!req.files.cover_image) {
         return res
             .status(400)

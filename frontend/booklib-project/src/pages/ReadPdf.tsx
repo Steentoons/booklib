@@ -11,14 +11,26 @@ import file from '../assets/images/Chess For Dummies ( PDFDrive ).pdf'
 const ReadPdf = () => {
     const { pdfUrl } = useContext(MyContext)
 
-    const [file, setFile] = useState<Blob | undefined>()
+    const [file, setFile] = useState<string | undefined>()
 
     useEffect(() => {
         axios.get(pdfUrl, { withCredentials: true })
             .then(res => {
                 if (res.status === 200) {
-                    const pdfBlob = new Blob([res.data], {type: 'application/pdf'})
-                    setFile(pdfBlob)
+                    // Converting the base64 string to a blob using atob...
+                    const binaryData = atob(res.data);
+                    const arrayBuffer = new ArrayBuffer(binaryData.length);
+                    const uint8Array = new Uint8Array(arrayBuffer);
+                    for (let i = 0; i < binaryData.length; i++) {
+                        uint8Array[i] = binaryData.charCodeAt(i);
+                    }
+                    const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+                    const newPdfUrl = URL.createObjectURL(blob)
+
+                    console.log(newPdfUrl)
+
+                    // Setting the newly generated blob url to the active state...
+                    setFile(newPdfUrl)
                 }
             })
             .catch(err => {
@@ -28,16 +40,6 @@ const ReadPdf = () => {
                 }
             })
     }, [])
-
-    useEffect(() => {
-        console.log('###################################################################')
-        console.log(file)
-    }, [file])
-
-    // @ts-ignore
-    const onloadsuccess = (pdf) => {
-        console.log("PDF Loaded", pdf.newPages)
-    }
 
     return (
         <div style={{
@@ -49,7 +51,7 @@ const ReadPdf = () => {
         }}>
             <Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
                 {
-                    file !== undefined && <Viewer fileUrl={URL.createObjectURL(file)} />
+                    file !== undefined ? <Viewer fileUrl={file} /> : <p style={{ padding: '50px' }}>Loading</p>
                 }
             </Worker>
         </div>

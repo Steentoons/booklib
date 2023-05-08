@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useContext } from "react";
 import { MyContext } from "./MyContextProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
 
-    const {setUser} = useContext(MyContext)
+    const {setUser, setBooks} = useContext(MyContext)
+    const navigate = useNavigate()
 
     const getBooks = () => {
         axios.get('http://localhost:3000/api/books', {withCredentials: true})
@@ -13,8 +14,16 @@ const Header = () => {
                 if(res.status === 200) {
                     console.log('There were books fetched')
                     console.log(res.data.books)
+                    setBooks([...res.data.books])
                 } else {
                     console.log("There was a problem when fetching the books")
+                }
+            })
+            .catch(err => {
+                if(err.response) {
+                    console.log(err.response.data.error)
+                } else {
+                    console.log('There was an uncaught error when fetching books')
                 }
             })
     }
@@ -49,8 +58,7 @@ const Header = () => {
                 {/* <li>Home</li> */}
                 <Link to='/add-book'><li className="type-bold">New book</li></Link>
                 <Link to='/'><li className="type-bold">New category</li></Link>
-                <li className="type-bold" onClick={() => getBooks()}>Books</li>
-                <li className="type-bold">Categories</li>
+                <Link to='/'><li className="type-bold">My Books</li></Link>
                 {/* <li>Login</li> */}
                 <li className="type-bold" onClick={() => logout()}>Logout</li>
                 {/* <li>Register</li> */}

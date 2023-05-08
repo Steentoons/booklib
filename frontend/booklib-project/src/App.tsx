@@ -7,12 +7,12 @@ import Library from "./pages/Library"
 import NotFound from "./pages/NotFound"
 import RegisterForm from "./components/RegisterForm"
 import AddBookForm from "./components/AddBookForm"
-import {MyContextProvider, MyContext} from "./components/MyContextProvider"
+import { MyContextProvider, MyContext } from "./components/MyContextProvider"
 import ReadPdf from "./pages/ReadPdf"
 import ReadEpub from "./pages/ReadEpub"
 
 function App() {
-  const {user, pdfUrl, setPdfUrl} = useContext(MyContext)
+  const { user, pdfUrl, epubUrl } = useContext(MyContext)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,11 +23,17 @@ function App() {
     }
   }, [user])
 
-    useEffect(() => {
-        if (pdfUrl) {
-            navigate('/read-pdf', { state: { pdfUrl } });
-        }
-    }, [pdfUrl, navigate]);
+  useEffect(() => {
+    if (pdfUrl) {
+      navigate('/read-pdf', { state: { pdfUrl } });
+    }
+  }, [pdfUrl, navigate]);
+
+  useEffect(() => {
+    if (epubUrl) {
+      navigate('/read-epub', { state: { epubUrl } });
+    }
+  }, [epubUrl, navigate]);
   return (
     <div className="type-normal">
       <Header />

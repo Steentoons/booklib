@@ -27,8 +27,21 @@ const getFiles = (req, res) => {
     }
 
     // Send back an image to the client...
-    const file = path.join(__dirname, "..", "book-uploads", fileName)
-    res.sendFile(file)
+    if (path.extname(fileName) === '.pdf') {
+        console.log('The extension is pdf')
+        const file = path.join(__dirname, "..", "book-uploads", fileName)
+        const data = fs.readFileSync(file);
+        const base64Data = Buffer.from(data).toString('base64');
+        res.send(base64Data)
+    } else {
+        console.log('Ext is epub')
+        const file = path.join(__dirname, "..", "book-uploads", fileName)
+        res.setHeader('Content-Type', 'application/epub+zip');
+        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+        res.send(file)
+
+        // TODO Try streaming the file first...
+    }
 }
 
 module.exports = {

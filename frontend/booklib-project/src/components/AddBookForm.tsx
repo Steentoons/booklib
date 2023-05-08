@@ -88,6 +88,7 @@ const AddBookForm = () => {
         return <li key={idx} className='type-filter' onClick={() => handleCategory(category._id, category.category)}>{category.category}</li>
     })
 
+    // @ts-ignore
     const handleCoverimageInput = e => {
         const files = e?.target.files
         if(files.length > 0) {
@@ -95,6 +96,7 @@ const AddBookForm = () => {
         }
     }
 
+    // @ts-ignore
     const handleFileInput = e => {
         const files = e?.target.files
         if(files.length > 0) {
@@ -105,7 +107,7 @@ const AddBookForm = () => {
     return (
         <div className="form-wrapper-layout">
             <div className="form-layout">
-                <form className="font-regular" onSubmit={handleSubmit(onSubmit)} >
+                <form encType='multipart/form-data' className="font-regular" onSubmit={handleSubmit(onSubmit)} >
                     <h2 className="type-form-title">Add book to library</h2>
                     <input className="form-input-layout" {...register('title', { required: true })} type='text' placeholder='Enter book title' />
                     {errors.title && <p className="error-input">Title field is required</p>}
@@ -128,7 +130,7 @@ const AddBookForm = () => {
                     </div>
                     <div className="input-layout mt-20">
                         <label htmlFor="file" className="btn-primary tertiary btn-full">Add book file
-                            <input type='file' {...register('file', { required: true })} onChange={(e) => handleFileInput(e)} aria-label="Add book file" role='textbox' className="btn-hidden" id="file" />
+                            <input type='file' {...register('file', { required: true })} onChange={(e) => handleFileInput(e)} aria-label="Add book file" role='textbox' className="btn-hidden" id="file" accept=".pdf,.epub" />
                         </label>
                         {errors.file && <p className="error-input mt-20">File is required</p>}
                     </div>

@@ -3,8 +3,7 @@ const refreshToken = require("../helpers/refreshToken");
 const verifyToken = async(req, res, next) => {
 
     if (!req.cookies.accessToken) {
-        console.log('So it goes in here?')
-            // Try to refresh the token...
+        // Try to refresh the token...
         try {
             if (!req.cookies.refreshToken) {
                 req.refreshTokenFailed = true;
@@ -32,6 +31,18 @@ const verifyToken = async(req, res, next) => {
             }
         } catch {
             req.tokenRefreshFailed = true;
+        }
+    } else {
+        if (!req.cookies.refreshToken) {
+            req.refreshTokenFailed = true;
+        } else {
+            jwt.verify(req.cookies.accessToken, process.env.JSON_TOKEN_SECRET, (err, user) => {
+                if (err) {
+                    req.tokenRefreshFailed = true;
+                } else {
+                    req.user = user;
+                }
+            })
         }
     }
 
