@@ -28,6 +28,8 @@ interface MyContextType {
     setPdfUrl: (url: string) => void;
     setEpubUrl: (url: string) => void;
     epubUrl: string;
+    refresh: boolean;
+    setRefresh: (bool: boolean) => void
 }
 
 const MyContext = createContext<MyContextType>({} as MyContextType)
@@ -51,8 +53,9 @@ const MyContextProvider = (props: { children: React.ReactNode }) => {
     const [epubUrl, setEpubUrl] = useState('');
     const [user, setUser] = useState<User | null>(handleLocalStorage())
     const [books, setBooks] = useState<BooksType[] | []>([])
+    const [refresh, setRefresh] = useState(false)
     return (
-        <MyContext.Provider value={{ user, setUser, books, setBooks, pdfUrl, setPdfUrl, setEpubUrl, epubUrl }}>
+        <MyContext.Provider value={{ user, setUser, books, setBooks, pdfUrl, setPdfUrl, setEpubUrl, epubUrl, refresh, setRefresh }}>
             {props.children}
         </MyContext.Provider>
     )

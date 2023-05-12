@@ -11,7 +11,7 @@ interface Login {
 
 const Library = () => {
 
-    const { user, books, setBooks } = useContext(MyContext)
+    const { user, books, setBooks, refresh, setRefresh } = useContext(MyContext)
 
     const navigate = useNavigate()
 
@@ -41,6 +41,28 @@ const Library = () => {
                 }
             })
     }, [])
+
+    useEffect(() => {
+        if(refresh) {
+            axios.get('http://localhost:3000/api/books', { withCredentials: true })
+            .then(res => {
+                if (res.status === 200) {
+
+                    setBooks([...res.data.books])
+                    console.log('These are the fetched books')
+                    console.log(res.data.books)
+                    setRefresh(false)
+                }
+            })
+            .catch(err => {
+                console.log('There was an error while fetching the books')
+                if (err.response) {
+                    console.log(err.response.status)
+                    console.log(err.response.data.error)
+                }
+            })
+        }
+    }, [refresh])
 
     const printBooks = books.map((book, idx) => {
         return <Book key={idx} _id={book._id} title={book.title} fileExt={book.fileExt} author={book.author} category={book.category} cover_image={book.cover_image}

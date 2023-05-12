@@ -26,7 +26,7 @@ const Book = ({
     fileExt,
     user,
     year, }: BookProps) => {
-    const { setPdfUrl, setEpubUrl } = useContext(MyContext)
+    const { setPdfUrl, setEpubUrl, setRefresh } = useContext(MyContext)
 
     const readBook = () => {
         if(fileExt === '.pdf') {
@@ -36,6 +36,26 @@ const Book = ({
             console.log(`http://localhost:3000/api/media/files/${file}`)
             setEpubUrl(`http://localhost:3000/api/media/files/${file}`)
         }
+    }
+
+    const deleteBook = () => {
+        // Delete book here...
+
+        console.log('Deleting...')
+        axios.delete(`http://localhost:3000/api/books/${_id}`, {withCredentials: true})
+            .then(res => {
+                if(res.status === 200) {
+                    console.log(res.data.message)
+                    setRefresh(true)
+                }
+            })
+            .catch(err => {
+                if(err.response) {
+                    console.log(err.response.data)
+                }
+
+                console.log('There was a problem when deleting a book')
+            })
     }
 
     return (
@@ -54,8 +74,8 @@ const Book = ({
                     <button
                         onClick={() => readBook()}
                         className='btn-read-book'>Read Book</button>
-                    <button className='btn-delete'>Delete</button>
-                    <button className='btn-edit'>Edit</button>
+                    <button className='btn-delete' onClick={() => deleteBook()}>Delete</button>
+                    <Link to='/edit-book'><button className='btn-edit'>Edit</button></Link>
                 </div>
             </div>
         </div>

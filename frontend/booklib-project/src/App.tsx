@@ -10,6 +10,7 @@ import AddBookForm from "./components/AddBookForm"
 import { MyContextProvider, MyContext } from "./components/MyContextProvider"
 import ReadPdf from "./pages/ReadPdf"
 import ReadEpub from "./pages/ReadEpub"
+import EditBookForm from "./components/EditBookForm"
 
 function App() {
   const { user, pdfUrl, epubUrl } = useContext(MyContext)
@@ -41,6 +42,7 @@ function App() {
         <Route path="/login" element={<Form />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/add-book" element={<AddBookForm />} />
+        <Route path="/edit-book" element={<EditBookForm />} />
         <Route path="/" element={<Library />} />
         <Route path="/read-pdf" element={<ReadPdf />} />
         <Route path="/read-epub" element={<ReadEpub />} />
