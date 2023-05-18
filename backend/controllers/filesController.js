@@ -34,11 +34,27 @@ const getFiles = (req, res) => {
         const base64Data = Buffer.from(data).toString('base64');
         res.send(base64Data)
     } else {
-        console.log('Ext is epub')
-        const file = path.join(__dirname, "..", "book-uploads", fileName)
-        res.setHeader('Content-Type', 'application/epub+zip');
-        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
-        res.send(file)
+        // console.log('Ext is epub')
+        const filePath = path.join(__dirname, "..", "book-uploads", fileName)
+            //     // const file = fs.readFile(filePath, (err, data) => {
+            //     //     if (err) throw err;
+            //     //     console.log(data)
+            //     //     return data
+            //     // });
+
+        // res.setHeader('Content-Type', 'application/epub');
+        // res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+        // res.sendFile(filePath);
+
+        fs.readFile(filePath, function(err, content) {
+            if (err) {
+                res.writeHead(400, { 'Content-type': 'text/html' });
+                res.end("No such file");
+            } else {
+                res.setHeader('content-type', 'application/epub+zip');
+                res.end(content);
+            }
+        });
 
         // TODO Try streaming the file first...
     }

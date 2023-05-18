@@ -58,7 +58,7 @@ const Header = () => {
                 {/* <li>Home</li> */}
                 <Link to='/add-book'><li className="type-bold">New book</li></Link>
                 <Link to='/add-category'><li className="type-bold">New category</li></Link>
-                <Link to='/'><li className="type-bold">My Books</li></Link>
+                <Link to='/'><li className="type-bold">My Books</li></Link> 
                 {/* <li>Login</li> */}
                 <li className="type-bold" onClick={() => logout()}>Logout</li>
                 {/* <li>Register</li> */}

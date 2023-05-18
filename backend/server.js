@@ -7,9 +7,9 @@ const cookieParser = require("cookie-parser")
 
 //open for me the file where we are making the api request please
 
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cookieParser())
 
 const bookRoutes = require("./routes/bookRoutes");

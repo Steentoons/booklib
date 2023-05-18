@@ -1,5 +1,4 @@
 const uploadFilter = (req, file, cb) => {
-    console.log("🚀 ~ file: uploadFilterHelper.js:2 ~ uploadFilter ~ file:", file)
     if (file.fieldname === 'cover_image') {
         const allowedMimeTypes = [
             "image/png",

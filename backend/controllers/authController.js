@@ -15,11 +15,15 @@ const login = async(req, res) => {
     const { email, password } = req.body;
     if (!email) {
         return res.status(400).json({ error: "The email field is required" });
-    } else if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+    }
+
+    if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
             email
         )) {
         return res.status(400).json({ error: "The email is invalid" });
-    } else if (!password) {
+    }
+
+    if (!password) {
         return res.status(400).json({ error: "The password field is required" });
     }
 
@@ -113,8 +117,11 @@ const logout = async(req, res) => {
             savedRefreshTokenObj.save();
 
             // Setting the cookies expiry to immediately...
-            res.cookie('refreshToken', '', { httpOnly: true, maxAge: 0 })
-            res.cookie('accessToken', '', { httpOnly: true, maxAge: 0 })
+            // res.cookie('refreshToken', '', { httpOnly: true, maxAge: 0 })
+            // res.cookie('accessToken', '', { httpOnly: true, maxAge: 0 })
+
+            res.clearCookie('refreshToken')
+            res.clearCookie('accessToken')
 
             return res
                 .status(204)

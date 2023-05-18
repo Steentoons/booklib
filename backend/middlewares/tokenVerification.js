@@ -2,6 +2,10 @@ const jwt = require("jsonwebtoken");
 const refreshToken = require("../helpers/refreshToken");
 const verifyToken = async(req, res, next) => {
 
+    // res.status(400).json({
+    //     error: "There was a problem when verifying"
+    // })
+
     if (!req.cookies.accessToken) {
         // Try to refresh the token...
         try {
