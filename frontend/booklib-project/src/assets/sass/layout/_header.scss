@@ -1,32 +1,86 @@
-@use '../helpers/variables';
-.header_layout {
-    width: 100%;
-    padding: 0 30px;
-    height: 3.75em;
-    position: fixed;
-    z-index: 10;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: variables.$white;
-    color: variables.$purple;
-    nav {
-        height: 100px;
-    }
-    ul {
-        padding: 0;
-        margin: 0;
-        display: flex;
-        justify-content: flex-end;
-        height: 100%;
-        align-items: center;
-    }
-    li {
-        list-style: none;
-        cursor: pointer;
-        padding: 10px;
-    }
-    li:hover {
-        border-bottom: solid variables.$yellow 3px;
-    }
-}
+        @use "../helpers/variables";
+        header {
+            .header_layout {
+                width: 100%;
+                padding: 0 30px;
+                height: 3.75em;
+                margin-top: 0;
+                position: fixed;
+                z-index: 10;
+                background: variables.$white;
+                color: variables.$purple;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                desktop-wrapper {
+                    height: 3.75em;
+                    width: 100%;
+                }
+                nav {
+                    height: 100px;
+                }
+                ul {
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    justify-content: flex-end;
+                    height: 100%;
+                    align-items: center;
+                }
+                li {
+                    list-style: none;
+                    cursor: pointer;
+                    padding: 10px;
+                }
+                li:hover {
+                    border-bottom: solid variables.$yellow 3px;
+                }
+                .desktop-nav {
+                    display: block;
+                }
+                .bars {
+                    display: none;
+                }
+                @media screen and (max-width: 560px) {
+                    .desktop-nav {
+                        display: none;
+                    }
+                    .bars {
+                        display: block;
+                        width: 40px;
+                        height: 40px;
+                        cursor: pointer;
+                    }
+                }
+            }
+            .mobile-nav {
+                display: none;
+            }
+            @media screen and (max-width: 560px) {
+                .mobile-nav {
+                    display: block;
+                    background: red;
+                    padding-top: 45px;
+                    nav {
+                        background: white;
+                        padding: 30px;
+                        ul {
+                            margin: 0;
+                            padding: 0;
+                        }
+                        li {
+                            list-style: none;
+                            width: 100%;
+                            padding: 16px;
+                            text-align: center;
+                            cursor: pointer;
+                            color: variables.$purple;
+                        }
+                        li:hover {
+                            color: white;
+                            background: #000;
+                        }
+                    }
+                }
+            }
+        }
