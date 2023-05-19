@@ -2,11 +2,11 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { MyContext } from "./MyContextProvider";
 import { Link, useNavigate } from "react-router-dom";
-import mobileBars from '../assets/images/bars.png'
+import mobileBars from '../assets/images/bars.png';
 
 const Header = () => {
 
-    const { setUser, setBooks } = useContext(MyContext)
+    const { setUser, setBooks, setError, setSuccess } = useContext(MyContext)
     const navigate = useNavigate()
     const [mobileNav, setMobileNav] = useState(false)
 
@@ -14,18 +14,17 @@ const Header = () => {
         axios.get('http://localhost:3000/api/books', { withCredentials: true })
             .then(res => {
                 if (res.status === 200) {
-                    console.log('There were books fetched')
-                    console.log(res.data.books)
+                    setSuccess('There were books fetched')
                     setBooks([...res.data.books])
                 } else {
-                    console.log("There was a problem when fetching the books")
+                    setError("There was a problem when fetching the books")
                 }
             })
             .catch(err => {
                 if (err.response) {
-                    console.log(err.response.data.error)
+                    setError(err.response.data.error)
                 } else {
-                    console.log('There was an uncaught error when fetching books')
+                    setError('There was an uncaught error when fetching books')
                 }
             })
     }
@@ -34,22 +33,20 @@ const Header = () => {
     const logout = () => {
         axios.delete('http://localhost:3000/api/authentication/logout', { withCredentials: true })
             .then(res => {
-                console.log('Progress on the logging out thingie')
                 if (res.status === 204) {
                     setUser(null)
-                    console.log("You were logged out successifully")
+                    setSuccess("You were logged out successifully")
                     return
                 }
             })
             .catch(err => {
                 if (err.response) {
-                    console.log(err.response.data.error)
-                    console.log(err.response.status)
+                    setError(err.response.data.error)
                     if (err.response.status === 403) {
                         setUser(null)
                     }
                 }
-                console.log("There was a problem when logging out")
+                setError("There was a problem when logging out")
             })
     }
 

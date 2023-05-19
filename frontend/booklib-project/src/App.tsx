@@ -12,9 +12,11 @@ import ReadPdf from "./pages/ReadPdf"
 import ReadEpub from "./pages/ReadEpub"
 import EditBookForm from "./components/EditBookForm"
 import AddCategoriesForm from "./components/AddCategoriesForm"
+import Success from "./components/Success"
+import Error from "./components/Error"
 
 function App() {
-  const { user, pdfUrl, epubUrl } = useContext(MyContext)
+  const { user, pdfUrl, epubUrl, success, setSuccess, error, setError, popup, setPopup } = useContext(MyContext)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -36,9 +38,36 @@ function App() {
       navigate('/read-epub', { state: { epubUrl } });
     }
   }, [epubUrl, navigate]);
+
+  useEffect(() => {
+    if(error) {
+      setTimeout(() => {
+        setError(undefined)
+      }, 3000);
+    }
+  }, [error])
+
+  useEffect(() => {
+    if(success) {
+      setTimeout(() => {
+        setSuccess(undefined)
+      }, 3000);
+    }
+  }, [success]) 
+
+  useEffect(() => {
+    if(popup) {
+      setTimeout(() => {
+        setPopup(undefined)
+      }, 3000);
+    }
+  }, [popup])
+
   return (
     <div className="type-normal">
       <Header />
+      {success && <Success success={success} />}
+      {error && <Error error={error} />}
       <Routes>
         <Route path="/login" element={<Form />} />
         <Route path="/register" element={<RegisterForm />} />

@@ -30,7 +30,7 @@ type FormData = yup.InferType<typeof schema>;
 
 const RegisterForm = () => {
 
-    const {setUser, setBooks} = useContext(MyContext)
+    const {setUser, setBooks, setError, setSuccess} = useContext(MyContext)
 
     const { handleSubmit, register, formState: { errors }} = useForm<FormData>({
         resolver: yupResolver(schema)
@@ -51,16 +51,15 @@ const RegisterForm = () => {
             axios.post('http://localhost:3000/api/register', newData, { withCredentials: true })
                 .then(res => {
                     if (res.status === 201) {
-                        console.log(res.data)
-                        console.log(res.data.message)
-                        useLoginHook(data, setUser, setBooks)
+                        setSuccess(res.data.message)
+                        useLoginHook(data, setUser, setBooks, setSuccess, setError)
                     } 
                 })
                 .catch(err => {
                     if (err.response) {
-                        console.log(err.response.data.error)
+                        setError(err.response.data.error)
                     }
-                    console.log("There was a problem when signing up")
+                    setError("There was a problem when signing up")
                 })
         }
     }

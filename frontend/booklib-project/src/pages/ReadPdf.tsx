@@ -9,7 +9,7 @@ import file from '../assets/images/Chess For Dummies ( PDFDrive ).pdf'
 
 // @ts-ignore
 const ReadPdf = () => {
-    const { pdfUrl } = useContext(MyContext)
+    const { pdfUrl, setError, setSuccess } = useContext(MyContext)
 
     const [file, setFile] = useState<string | undefined>()
 
@@ -29,15 +29,16 @@ const ReadPdf = () => {
 
                     console.log(newPdfUrl)
 
+                    setSuccess("Opening the book")
                     // Setting the newly generated blob url to the active state...
                     setFile(newPdfUrl)
                 }
             })
             .catch(err => {
                 if (err.response) {
-                    console.log(err.response.status)
-                    console.log("there was an error when fetching the file")
+                    setError(err.response.status)
                 }
+                setError("there was an error when fetching the file")
             })
     }, [])
 

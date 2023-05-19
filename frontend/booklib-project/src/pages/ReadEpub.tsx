@@ -6,7 +6,7 @@ import axios from 'axios'
 
 const ReadEpub = () => {
 
-    const { epubUrl } = useContext(MyContext)
+    const { epubUrl, setSuccess, setError } = useContext(MyContext)
 
     const [file, setFile] = useState<string | undefined>()
 
@@ -30,8 +30,6 @@ const ReadEpub = () => {
                     // const blob = new Blob([arrayBuffer], { type: 'application/epub+zip' });
                     // const blobUrl = URL.createObjectURL(blob);
 
-                    console.log(res.data)
-
                     const blob = new Blob([res.data], { type: 'application/epub+zip' });
                     // console.log(res.data)
                     const blobUrl = URL.createObjectURL(blob)
@@ -39,14 +37,15 @@ const ReadEpub = () => {
                     // console.log(blobUrl)
 
                     // Setting the newly generated blob url to the active state...
+                    setSuccess("Opening the book")
                     setFile(blobUrl)
                 }
             })
             .catch(err => {
                 if (err.response) {
-                    console.log(err.response.data.error)
-                    console.log("there was an error when fetching the file")
+                    setError(err.response.data.error)
                 }
+                setError("there was an error when fetching the file")
             })
         }
     }, [])

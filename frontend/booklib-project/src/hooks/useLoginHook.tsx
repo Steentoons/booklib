@@ -1,24 +1,24 @@
 import axios from "axios";
-import { User, BooksType } from "../components/MyContextProvider";
+import { User, BooksType, MyContext } from "../components/MyContextProvider";
+import { useContext } from "react";
 
 export interface LoginType {
     email: string;
     password: string;
 }
 
-export const useLoginHook = (data: LoginType, setUser: (user: User | null) => void, setBooks: (books: BooksType[]) => void) => {
+export const useLoginHook = (data: LoginType, setUser: (user: User | null) => void, setBooks: (books: BooksType[]) => void, setSuccess: (success: string | undefined) => void, setError: (error: string | undefined) => void) => {
     axios.post('http://localhost:3000/api/authentication/login', data, { withCredentials: true })
         .then(res => {
             if (res.status === 200) {
-                console.log(res.data)
-
                 setUser(res.data.data)
+                setSuccess('You were logged in successifully')
             }
         })
         .catch(err => {
             if (err.response) {
-                console.log(err.response.data.error)
+                setError(err.response.data.error)
             }
-            console.log('There was an error when trying to login')
+            setError('There was an error when trying to login')
         })
 }

@@ -26,7 +26,7 @@ const Book = ({
     fileExt,
     user,
     year, }: BookProps) => {
-    const { setPdfUrl, setEpubUrl, setRefresh } = useContext(MyContext)
+    const { setPdfUrl, setEpubUrl, setRefresh, setError, setSuccess } = useContext(MyContext)
 
     const readBook = () => {
         if(fileExt === '.pdf') {
@@ -45,16 +45,16 @@ const Book = ({
         axios.delete(`http://localhost:3000/api/books/${_id}`, {withCredentials: true})
             .then(res => {
                 if(res.status === 200) {
-                    console.log(res.data.message)
+                    setSuccess(res.data.message)
                     setRefresh(true)
                 }
             })
             .catch(err => {
                 if(err.response) {
-                    console.log(err.response.data)
+                    setError(err.response.data)
                 }
 
-                console.log('There was a problem when deleting a book')
+                setError('There was a problem when deleting a book')
             })
     }
 

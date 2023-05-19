@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { addBookFields } from '../data/form-fields'
 import { FormFieldsProps } from './Form'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { MyContext } from './MyContextProvider'
 
 interface addBookFormType {
     title: string;
@@ -29,6 +30,7 @@ const AddBookForm = () => {
     const [categories, setCategories] = useState<CategoryType[] | []>([])
     const [filterOpen, setFillterOpen] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState<SelectedCategoryType | undefined>(undefined)
+    const {setError, setSuccess} = useContext(MyContext)
 
     useEffect(() => {
         axios.get("http://localhost:3000/api/categories", { withCredentials: true })
@@ -39,10 +41,10 @@ const AddBookForm = () => {
             })
             .catch(err => {
                 if (err.response) {
-                    console.log(err.response.data.error)
+                    setError(err.response.data.error)
                 }
 
-                console.log('There was an error when getting categories')
+                setError('There was an error when getting categories')
             })
     }, [])
 
@@ -64,17 +66,17 @@ const AddBookForm = () => {
         axios.post('http://localhost:3000/api/books', formData, { withCredentials: true })
             .then(res => {
                 if (res.status === 201) {
-                    console.log(res.data)
-                    console.log(res.data.message)
+                    setSuccess(res.data)
+                    setSuccess(res.data.message)
                 } else {
-                    console.log(res.data.error)
+                    setError(res.data.error)
                 }
             })
             .catch(err => {
                 if(err.response) {
-                    console.log(err.response.data.error)
+                    setError(err.response.data.error)
                 }
-                console.log("There was an issue when adding a book")
+                setError("There was an issue when adding a book")
             })
     }
 

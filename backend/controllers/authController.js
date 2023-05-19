@@ -11,7 +11,8 @@ const dayjs = require("dayjs");
     Login into the system and generating token...
 */
 const login = async(req, res) => {
-    // Validation...
+    console.log("Validating...")
+        // Validation...
     const { email, password } = req.body;
     if (!email) {
         return res.status(400).json({ error: "The email field is required" });

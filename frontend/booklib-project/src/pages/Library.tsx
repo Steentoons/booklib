@@ -11,7 +11,7 @@ interface Login {
 
 const Library = () => {
 
-    const { user, books, setBooks, refresh, setRefresh } = useContext(MyContext)
+    const { user, books, setBooks, refresh, setRefresh, setSuccess, setError } = useContext(MyContext)
 
     const navigate = useNavigate()
 
@@ -29,15 +29,13 @@ const Library = () => {
                 if (res.status === 200) {
 
                     setBooks([...res.data.books])
-                    console.log('These are the fetched books')
-                    console.log(res.data.books)
+                    setSuccess("The books were fetched successifully")
                 }
             })
             .catch(err => {
-                console.log('There was an error while fetching the books')
+                setError('There was an error while fetching the books')
                 if (err.response) {
-                    console.log(err.response.status)
-                    console.log(err.response.data.error)
+                    setError(err.response.data.error)
                 }
             })
     }, [])
@@ -49,17 +47,15 @@ const Library = () => {
                 if (res.status === 200) {
 
                     setBooks([...res.data.books])
-                    console.log('These are the fetched books')
-                    console.log(res.data.books)
+                    setSuccess('The books were fetched successifully')
                     setRefresh(false)
                 }
             })
             .catch(err => {
-                console.log('There was an error while fetching the books')
                 if (err.response) {
-                    console.log(err.response.status)
-                    console.log(err.response.data.error)
+                    setError(err.response.data.error)
                 }
+                setError('There was an error while fetching the books')
             })
         }
     }, [refresh])

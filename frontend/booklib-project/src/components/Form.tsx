@@ -36,7 +36,7 @@ type FormData = yup.InferType<typeof schema>;
 
 const Form = () => {
 
-    const {setUser, setBooks, user} = useContext(MyContext)
+    const {setUser, setBooks, user, setError, setSuccess} = useContext(MyContext)
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: yupResolver(schema)
@@ -44,9 +44,8 @@ const Form = () => {
 
     // @ts-ignore
     const login = (data) => {
-        console.log(data)
         if (data.email && data.password) {
-            useLoginHook(data, setUser, setBooks)
+            useLoginHook(data, setUser, setBooks, setSuccess, setError)
         }
     }
 
