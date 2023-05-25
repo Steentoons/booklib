@@ -37,8 +37,8 @@ const ReadPdf = () => {
             .catch(err => {
                 if (err.response) {
                     setError(err.response.status)
+                    setError("there was an error when fetching the file")
                 }
-                setError("there was an error when fetching the file")
             })
     }, [])
 

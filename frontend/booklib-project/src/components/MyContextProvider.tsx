@@ -35,7 +35,9 @@ interface MyContextType {
     error: string | undefined;
     setError: (error: string | undefined) => void;
     popup: string | undefined;
-    setPopup: (popup: string | undefined) => void
+    setPopup: (popup: string | undefined) => void;
+    currentBookId: string | undefined;
+    setCurrentBookId: (id: string | undefined) => void;
 }
 
 const MyContext = createContext<MyContextType>({} as MyContextType)
@@ -63,8 +65,9 @@ const MyContextProvider = (props: { children: React.ReactNode }) => {
     const [success, setSuccess] = useState<string | undefined>(undefined)
     const [error, setError] = useState<string | undefined>(undefined)
     const [popup, setPopup] = useState<string | undefined>(undefined)
+    const [currentBookId, setCurrentBookId] = useState<string | undefined>(undefined)
     return (
-        <MyContext.Provider value={{ user, setUser, books, setBooks, pdfUrl, setPdfUrl, setEpubUrl, epubUrl, refresh, setRefresh, success, setSuccess, error, setError, popup, setPopup }}>
+        <MyContext.Provider value={{ user, setUser, books, setBooks, pdfUrl, setPdfUrl, setEpubUrl, epubUrl, refresh, setRefresh, success, setSuccess, error, setError, popup, setPopup, currentBookId, setCurrentBookId }}>
             {props.children}
         </MyContext.Provider>
     )

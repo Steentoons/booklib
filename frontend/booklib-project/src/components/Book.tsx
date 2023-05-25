@@ -26,7 +26,7 @@ const Book = ({
     fileExt,
     user,
     year, }: BookProps) => {
-    const { setPdfUrl, setEpubUrl, setRefresh, setError, setSuccess } = useContext(MyContext)
+    const { setPdfUrl, setEpubUrl, setRefresh, setError, setSuccess, setCurrentBookId } = useContext(MyContext)
 
     const readBook = () => {
         if(fileExt === '.pdf') {
@@ -75,7 +75,7 @@ const Book = ({
                         onClick={() => readBook()}
                         className='btn-read-book'>Read Book</button>
                     <button className='btn-delete' onClick={() => deleteBook()}>Delete</button>
-                    <Link to='/edit-book'><button className='btn-edit'>Edit</button></Link>
+                    <Link to='/edit-book' onClick={() => setCurrentBookId(_id)}><button className='btn-edit'>Edit</button></Link>
                 </div>
             </div>
         </div>

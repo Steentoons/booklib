@@ -111,6 +111,8 @@ const postBooks = (req, res, next) => {
     Update the books...
 */
 const putBooks = async(req, res, next) => {
+
+    console.log("We are updating the books...")
     const { title, author, year, category } = req.body;
     if (!title) {
         return res.status(400).json({ error: "The title field cannot be empty" });

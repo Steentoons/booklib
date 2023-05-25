@@ -5,7 +5,7 @@ import { FormFieldsProps } from './Form'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { MyContext } from './MyContextProvider'
 
-interface addBookFormType {
+export interface addBookFormType {
     title: string;
     author: string;
     year: string;
@@ -14,13 +14,13 @@ interface addBookFormType {
     file: string;
 }
 
-interface CategoryType {
+export interface CategoryType {
     _id: string;
     category: string;
     __v: number;
 }
 
-interface SelectedCategoryType {
+export interface SelectedCategoryType {
     _id: string;
     category: string;
 }

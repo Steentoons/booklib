@@ -16,7 +16,9 @@ const bookRoutes = require("./routes/bookRoutes");
 const categoryRoute = require("./routes/categoryRoute");
 const authRoute = require("./routes/authRoute"); //open this guy
 const userRoute = require("./routes/userRoute");
-const fileRoutes = require("./routes/fileRoutes")
+const fileRoutes = require("./routes/fileRoutes");
+const formRoutes = require("./routes/formRoutes");
+const filterCategoryRoute = require("./routes/filterCategoryRoute")
 require("colors");
 connect();
 
@@ -27,7 +29,9 @@ app.use("/api/books", bookRoutes);
 app.use("/api/categories", categoryRoute);
 app.use("/api/authentication", authRoute);
 app.use("/api/register", userRoute);
-app.use("/api/media", fileRoutes)
+app.use("/api/media", fileRoutes);
+app.use("/api/formdata", formRoutes)
+app.use("/api/filter-category", filterCategoryRoute)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
