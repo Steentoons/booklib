@@ -86,8 +86,8 @@ const EditBookForm = () => {
                 setSelectedCategory(res.data.formdata.category)
 
                 // set them medias...
-                setValue('cover_image', getCoverImage(res.data.formdata.cover_image))
-                setValue('file', getFile(res.data.formdata.file))
+                // setValue('cover_image', getCoverImage(res.data.formdata.cover_image))
+                // setValue('file', getFile(res.data.formdata.file))
             })
             .catch(err => {
                 if (err.response) {
@@ -108,22 +108,22 @@ const EditBookForm = () => {
     })
 
     // @ts-ignore
-    const handleCoverimageInput = e => {
-        const files = e?.target.files
-        if (files.length > 0) {
-            // setCoverImage(files[0])
-            setValue('cover_image', files[0])
-        }
-    }
+    // const handleCoverimageInput = e => {
+    //     const files = e?.target.files
+    //     if (files.length > 0) {
+    //         // setCoverImage(files[0])
+    //         setValue('cover_image', files[0])
+    //     }
+    // }
 
     // @ts-ignore
-    const handleFileInput = e => {
-        const files = e?.target.files
-        if (files.length > 0) {
-            // setFile(files[0])
-            setValue('file', files[0])
-        }
-    }
+    // const handleFileInput = e => {
+    //     const files = e?.target.files
+    //     if (files.length > 0) {
+    //         // setFile(files[0])
+    //         setValue('file', files[0])
+    //     }
+    // }
 
     const onSubmit: SubmitHandler<addBookFormType> = data => {
         console.log(data)
@@ -133,10 +133,10 @@ const EditBookForm = () => {
         formData.append('year', data.year)
         formData.append('category', data.category)
         // @ts-ignore
-        formData.append('cover_image', data.cover_image)
+        // formData.append('cover_image', data.cover_image)
         // @ts-ignore
-        formData.append('file', data.file)
-        axios.put('http://localhost:3000/api/books', formData, { withCredentials: true })
+        // formData.append('file', data.file)
+        axios.put(`http://localhost:3000/api/books/${currentBookId}`, formData, { withCredentials: true })
             .then(res => {
                 if (res.status === 201) {
                     setSuccess(res.data)
@@ -149,6 +149,7 @@ const EditBookForm = () => {
                 if (err.response) {
                     setError(err.response.data.error)
                 }
+                console.log(err.response.status)
                 setError("There was an issue when adding a book")
             })
     }
@@ -163,7 +164,7 @@ const EditBookForm = () => {
                     {errors.title && <p className="error-input">Title field is required</p>}
                     <input className="form-input-layout" {...register('author', { required: true })} type='text' placeholder='Enter book author' />
                     {errors.author && <p className="error-input">Author field is required</p>}
-                    <button onClick={() => setFillterOpen(!filterOpen)} {...register('category', { required: true })} value={selectedCategory?._id} className='dropdown-input'>{selectedCategory?.category ? selectedCategory.category : 'Select book category'}</button>
+                    <button type='button' onClick={() => setFillterOpen(!filterOpen)} {...register('category', { required: true })} value={selectedCategory?._id} className='dropdown-input'>{selectedCategory?.category ? selectedCategory.category : 'Select book category'}</button>
                     {filterOpen && <div className='floating-category-filter-layout'>
                         <ul className='floating-filter-div'>
                             {printCategories}
@@ -172,18 +173,18 @@ const EditBookForm = () => {
                     {errors.category && <p className="error-input">Category field is required</p>}
                     <input className="form-input-layout" {...register('year', { required: true })} type='number' placeholder='Enter book year' />
                     {errors.year && <p className="error-input">Year field is required</p>}
-                    <div className="input-layout mt-20">
+                    {/* <div className="input-layout mt-20">
                         <label htmlFor="cover-image" className="btn-primary tertiary btn-full">Add cover image
                             <input type='file' {...register('cover_image', { required: false })} onChange={(e) => handleCoverimageInput(e)} aria-label="Add cover image" role='textbox' className="btn-hidden" id="cover-image" />
                         </label>
                         {errors.cover_image && <p className="error-input mt-20">Cover image is required</p>}
-                    </div>
-                    <div className="input-layout mt-20">
+                    </div> */}
+                    {/* <div className="input-layout mt-20">
                         <label htmlFor="file" className="btn-primary tertiary btn-full">Add book file
                             <input type='file' {...register('file', { required: false })} onChange={(e) => handleFileInput(e)} aria-label="Add book file" role='textbox' className="btn-hidden" id="file" accept=".pdf,.epub" />
                         </label>
                         {errors.file && <p className="error-input mt-20">File is required</p>}
-                    </div>
+                    </div> */}
                     <div className="input-layout">
                         <button className="btn-primary secondary btn-full" type='submit'>Submit book</button>
                     </div>

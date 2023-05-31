@@ -44,10 +44,30 @@ const Search = () => {
         return <li key={idx} className='type-filter' onClick={() => handleFilter(category._id, category.category)}>{category.category}</li>
     })
 
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.currentTarget.value
+        console.log(e.currentTarget.value)
+        if(val && val !== '') {
+            axios.get(`http://localhost:3000/api/search/${val}`, {withCredentials: true})
+            .then(res => {
+                if(res.status === 200) {
+                    console.log(res.data.books)
+                    setBooks([...res.data.books])
+                }
+            })
+            .catch(err => {
+                if(err.response) {
+                    console.log(err.response.status)
+                }
+                console.log(err.message)
+            })
+        }
+    }
+
     return (
         <div className='search-layout'>
             <form action="" className='search-form flex-grow'>
-                <input type="text" placeholder='Above all else' className="form-input-layout flex-grow" />
+                <input type="text" placeholder='Above all else' className="form-input-layout flex-grow" onChange={(e) => handleSearch(e)} />
                 <div className='search-floating-btn-layout'>
                     <button type='submit' className='btn-read-book search-floating-btn'>Search Book</button>
                 </div>

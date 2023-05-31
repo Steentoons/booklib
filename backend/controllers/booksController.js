@@ -110,9 +110,10 @@ const postBooks = (req, res, next) => {
     Method PUT
     Update the books...
 */
-const putBooks = async(req, res, next) => {
+const putBooks = async(req, res) => {
 
-    console.log("We are updating the books...")
+    console.log(req.body)
+
     const { title, author, year, category } = req.body;
     if (!title) {
         return res.status(400).json({ error: "The title field cannot be empty" });
@@ -124,32 +125,37 @@ const putBooks = async(req, res, next) => {
         return res
             .status(400)
             .json({ error: "The category field cannot be empty" });
-    } else if (!req.files.cover_image) {
-        return res
-            .status(400)
-            .json({ error: "The cover image field is empty or invalid file type" });
-    } else if (!req.files.file) {
-        return res
-            .status(400)
-            .json({ error: "The file field is empty or invalid file type" });
     }
 
-    const { cover_image, file } = req.files;
+    console.log(req.body)
+        // else if (!req.files.cover_image) {
+        //     return res
+        //         .status(400)
+        //         .json({ error: "The cover image field is empty or invalid file type" });
+        // } else if (!req.files.file) {
+        //     return res
+        //         .status(400)
+        //         .json({ error: "The file field is empty or invalid file type" });
+        // }
+
+    // const { cover_image, file } = req.files;
 
     const newBook = {
         title: title,
         author: author,
         year: year,
         category: category,
-        cover_image: cover_image[0].path,
-        file: file[0].path,
+        // cover_image: cover_image[0].path,
+        // file: file[0].path,
         user: req.user.email,
     };
 
-    const oldBook = await Book.findById(req.params.id);
+    // const oldBook = await Book.findById(req.params.id);
 
     // Remove the duplicates module...
-    manageFiles(oldBook.cover_image, oldBook.file);
+    // manageFiles(oldBook.cover_image, oldBook.file);
+
+    // TODO To be checked if working...
 
     Book.updateOne({ _id: req.params.id }, newBook, (err, book) => {
         if (err) {

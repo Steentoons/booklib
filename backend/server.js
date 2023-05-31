@@ -18,6 +18,7 @@ const authRoute = require("./routes/authRoute"); //open this guy
 const userRoute = require("./routes/userRoute");
 const fileRoutes = require("./routes/fileRoutes");
 const formRoutes = require("./routes/formRoutes");
+const searchRoute = require("./routes/searchRoute")
 const filterCategoryRoute = require("./routes/filterCategoryRoute")
 require("colors");
 connect();
@@ -32,6 +33,7 @@ app.use("/api/register", userRoute);
 app.use("/api/media", fileRoutes);
 app.use("/api/formdata", formRoutes)
 app.use("/api/filter-category", filterCategoryRoute)
+app.use("/api/search", searchRoute)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
