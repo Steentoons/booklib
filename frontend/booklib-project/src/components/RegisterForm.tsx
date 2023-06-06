@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import axios from 'axios'
 import { FormFieldsProps } from './Form'
 import { registerFields } from '../data/form-fields'
@@ -6,7 +6,7 @@ import {useForm} from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
 import { useLoginHook } from '../hooks/useLoginHook'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { MyContext } from './MyContextProvider'
 
 const schema = yup.object().shape({
@@ -30,10 +30,17 @@ type FormData = yup.InferType<typeof schema>;
 
 const RegisterForm = () => {
 
-    const {setUser, setBooks, setError, setSuccess} = useContext(MyContext)
+    const {setUser, setBooks, setError, setSuccess, user} = useContext(MyContext)
 
     const { handleSubmit, register, formState: { errors }} = useForm<FormData>({
         resolver: yupResolver(schema)
+    })
+
+    const navigate = useNavigate()
+    useEffect(() => {
+        if (user !== null) {
+            navigate("/")
+        }
     })
 
     // @ts-ignore
@@ -46,8 +53,6 @@ const RegisterForm = () => {
                 password: data.password
             }
 
-            console.log("It passes through here")
-
             axios.post('http://localhost:3000/api/register', newData, { withCredentials: true })
                 .then(res => {
                     if (res.status === 201) {
@@ -58,8 +63,9 @@ const RegisterForm = () => {
                 .catch(err => {
                     if (err.response) {
                         setError(err.response.data.error)
+                    } else {
+                        setError("There was a problem when signing up")
                     }
-                    setError("There was a problem when signing up")
                 })
         }
     }

@@ -30,18 +30,14 @@ const Book = ({
 
     const readBook = () => {
         if(fileExt === '.pdf') {
-            console.log(`http://localhost:3000/api/media/files/${file}`)
             setPdfUrl(`http://localhost:3000/api/media/files/${file}`)
         } else if(fileExt === '.epub' || fileExt === '.epub+zip') {
-            console.log(`http://localhost:3000/api/media/files/${file}`)
             setEpubUrl(`http://localhost:3000/api/media/files/${file}`)
         }
     }
 
     const deleteBook = () => {
         // Delete book here...
-
-        console.log('Deleting...')
         axios.delete(`http://localhost:3000/api/books/${_id}`, {withCredentials: true})
             .then(res => {
                 if(res.status === 200) {
@@ -52,9 +48,9 @@ const Book = ({
             .catch(err => {
                 if(err.response) {
                     setError(err.response.data)
+                } else {
+                    setError('There was a problem when deleting a book')
                 }
-
-                setError('There was a problem when deleting a book')
             })
     }
 

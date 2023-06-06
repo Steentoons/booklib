@@ -1,66 +1,54 @@
 import Header from "./components/Header"
-import Form, { FormFieldsProps } from "./components/Form"
-import { createContext, useContext, useEffect, useState } from "react"
-import { addBookfields } from "./data/data"
+import Form from "./components/Form"
+import { useContext, useEffect } from "react"
 import { Route, Routes, useNavigate } from "react-router-dom"
 import Library from "./pages/Library"
 import NotFound from "./pages/NotFound"
 import RegisterForm from "./components/RegisterForm"
 import AddBookForm from "./components/AddBookForm"
-import { MyContextProvider, MyContext } from "./components/MyContextProvider"
+import { MyContext } from "./components/MyContextProvider"
 import ReadPdf from "./pages/ReadPdf"
 import ReadEpub from "./pages/ReadEpub"
 import EditBookForm from "./components/EditBookForm"
 import AddCategoriesForm from "./components/AddCategoriesForm"
 import Success from "./components/Success"
 import Error from "./components/Error"
+import {User} from "./components/MyContextProvider"
+import { useLocation } from "react-router-dom"
 
 function App() {
   const { user, pdfUrl, epubUrl, success, setSuccess, error, setError, popup, setPopup } = useContext(MyContext)
   const navigate = useNavigate()
+  const location = useLocation()
 
+  // Setting the user...
   useEffect(() => {
-    if (user === null) {
-      localStorage.setItem("user", '')
-    } else {
-      localStorage.setItem("user", JSON.stringify(user))
-    }
+    setUserFn(user)
   }, [user])
 
+  // Navigating to pdf route...
   useEffect(() => {
-    if (pdfUrl) {
-      navigate('/read-pdf', { state: { pdfUrl } });
-    }
+    navigateBook(pdfUrl, navigate, '/read-pdf')
   }, [pdfUrl, navigate]);
 
+  // Navigatin to epub route...
   useEffect(() => {
-    if (epubUrl) {
-      navigate('/read-epub', { state: { epubUrl } });
-    }
+    navigateBook(epubUrl, navigate, '/read-epub')
   }, [epubUrl, navigate]);
 
+  // Resetting error popup...
   useEffect(() => {
-    if(error) {
-      setTimeout(() => {
-        setError(undefined)
-      }, 3000);
-    }
+    popupReset(error, setError)
   }, [error])
 
+  // Resetting success popup...
   useEffect(() => {
-    if(success) {
-      setTimeout(() => {
-        setSuccess(undefined)
-      }, 3000);
-    }
+    popupReset(success, setSuccess)
   }, [success]) 
 
+  // Resetting the popup...
   useEffect(() => {
-    if(popup) {
-      setTimeout(() => {
-        setPopup(undefined)
-      }, 3000);
-    }
+    popupReset(popup, setPopup)
   }, [popup])
 
   return (
@@ -81,6 +69,36 @@ function App() {
       </Routes>
     </div>
   )
+}
+
+function setUserFn (user: User | null) {
+  if (user === null) {
+    localStorage.setItem("user", '')
+  } else {
+    localStorage.setItem("user", JSON.stringify(user))
+  }
+}
+
+// @ts-ignore
+function navigateBook (url: string | undefined, navigate, route) {
+  if (url) {
+    navigate(route, { state: { url } });
+  }
+}
+
+// @ts-ignore
+function navigateEpub (epubUrl: string, navigate) {
+  if (epubUrl) {
+    navigate('/read-epub', { state: { epubUrl } });
+  }
+}
+
+function popupReset (message: string | undefined, resetPopup: (error: string | undefined) => void ) {
+  if(message) {
+    setTimeout(() => {
+      resetPopup(undefined)
+    }, 3000);
+  }
 }
 
 export default App

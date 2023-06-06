@@ -15,26 +15,12 @@ const ReadEpub = () => {
             localStorage.setItem('epubUrl', epubUrl)
         }
         if(localStorage.getItem('epubUrl')) {
-            console.log("Kapiiiiish")
             // @ts-ignore
             axios.get(localStorage.getItem('epubUrl'), { withCredentials: true })
             .then(res => {
                 if (res.status === 200) {
-                    // Converting the base64 string to a blob using atob...
-                    // const binaryData = atob(res.data);
-                    // const arrayBuffer = new ArrayBuffer(binaryData.length);
-                    // const uint8Array = new Uint8Array(arrayBuffer);
-                    // for (let i = 0; i < binaryData.length; i++) {
-                    //     uint8Array[i] = binaryData.charCodeAt(i);
-                    // }
-                    // const blob = new Blob([arrayBuffer], { type: 'application/epub+zip' });
-                    // const blobUrl = URL.createObjectURL(blob);
-
                     const blob = new Blob([res.data], { type: 'application/epub+zip' });
-                    // console.log(res.data)
                     const blobUrl = URL.createObjectURL(blob)
-
-                    // console.log(blobUrl)
 
                     // Setting the newly generated blob url to the active state...
                     setSuccess("Opening the book")
@@ -44,8 +30,9 @@ const ReadEpub = () => {
             .catch(err => {
                 if (err.response) {
                     setError(err.response.data.error)
+                } else {
+                    setError("there was an error when fetching the file")
                 }
-                setError("there was an error when fetching the file")
             })
         }
     }, [])
@@ -68,7 +55,6 @@ const ReadEpub = () => {
     const [location, setLocation] = useState(handleLocation());
 
     useEffect(() => {
-        console.log(file)
     }, [file])
 
     const handleLocationChanged = (epubcifi: string) => {

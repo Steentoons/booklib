@@ -22,9 +22,9 @@ const AddCategoriesForm = () => {
             .catch(err => {
                 if(err.response) {
                     setError(err.response.data.error)
+                } else {
+                    setError("There was a problem when adding a category")
                 }
-
-                setError("There was a problem when adding a category")
             })
     }
   return (
@@ -38,9 +38,6 @@ const AddCategoriesForm = () => {
                         <button type="submit" className="btn-primary secondary btn-full">Add category</button>
                     </div>
                 </form>
-                <div className="input-layout read-book-layout">
-                    <Link to='/register'><button className="btn-primary tertiary btn-full">Sign in</button></Link>
-                </div>
             </div>
         </div>
   )

@@ -24,10 +24,10 @@ interface MyContextType {
     setUser: (user: User | null) => void;
     books: BooksType[] | [];
     setBooks: (books: BooksType[]) => void;
-    pdfUrl: string;
-    setPdfUrl: (url: string) => void;
-    setEpubUrl: (url: string) => void;
-    epubUrl: string;
+    pdfUrl: string | undefined;
+    setPdfUrl: (url: string | undefined) => void;
+    setEpubUrl: (url: string | undefined) => void;
+    epubUrl: string | undefined;
     refresh: boolean;
     setRefresh: (bool: boolean) => void;
     success: string | undefined;
@@ -57,8 +57,8 @@ const MyContextProvider = (props: { children: React.ReactNode }) => {
             return parsedUser
         }
     }
-    const [pdfUrl, setPdfUrl] = useState('');
-    const [epubUrl, setEpubUrl] = useState('');
+    const [pdfUrl, setPdfUrl] = useState<string | undefined>('');
+    const [epubUrl, setEpubUrl] = useState<string | undefined>('');
     const [user, setUser] = useState<User | null>(handleLocalStorage())
     const [books, setBooks] = useState<BooksType[] | []>([])
     const [refresh, setRefresh] = useState(false)

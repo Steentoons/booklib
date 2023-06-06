@@ -2,13 +2,13 @@
 .form-wrapper-layout {
     width: 100%;
     position: relative;
-    z-index: 20;
+    z-index: 10;
     .form-layout {
         // position: fixed;
         width: 100%;
         overflow-y: scroll;
         background: helpers.$purple;
-        z-index: 20;
+        z-index: 10;
         display: flex;
         flex-direction: column;
         align-items: center;

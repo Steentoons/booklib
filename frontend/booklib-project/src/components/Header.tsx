@@ -6,7 +6,7 @@ import mobileBars from '../assets/images/bars.png';
 
 const Header = () => {
 
-    const { setUser, setBooks, setError, setSuccess } = useContext(MyContext)
+    const { setUser, setBooks, setError, setSuccess, setPdfUrl, setEpubUrl } = useContext(MyContext)
     const navigate = useNavigate()
     const [mobileNav, setMobileNav] = useState(false)
 
@@ -16,8 +16,6 @@ const Header = () => {
                 if (res.status === 200) {
                     setSuccess('There were books fetched')
                     setBooks([...res.data.books])
-                } else {
-                    setError("There was a problem when fetching the books")
                 }
             })
             .catch(err => {
@@ -45,9 +43,15 @@ const Header = () => {
                     if (err.response.status === 403) {
                         setUser(null)
                     }
+                } else {
+                    setError("There was a problem when logging out")
                 }
-                setError("There was a problem when logging out")
             })
+    }
+
+    const resetBookUrl = () => {
+        setEpubUrl(undefined)
+        setPdfUrl(undefined)
     }
 
     return <header>
@@ -55,13 +59,10 @@ const Header = () => {
             <h1 className="type-logo">booklib</h1>
             <nav className="desktop-nav">
                 <ul>
-                    {/* <li>Home</li> */}
-                    <Link to='/add-book'><li className="type-bold">New book</li></Link>
-                    <Link to='/add-category'><li className="type-bold">New category</li></Link>
-                    <Link to='/'><li className="type-bold">My Books</li></Link>
-                    {/* <li>Login</li> */}
-                    <li className="type-bold" onClick={() => logout()}>Logout</li>
-                    {/* <li>Register</li> */}
+                    <Link to='/' onClickCapture={() => resetBookUrl()}><li className="type-bold">My Books</li></Link>
+                    <Link to='/add-book' onClickCapture={() => resetBookUrl()}><li className="type-bold">New book</li></Link>
+                    <Link to='/add-category' onClickCapture={() => resetBookUrl()}><li className="type-bold">New category</li></Link>
+                    <li onClickCapture={() => resetBookUrl()} className="type-bold" onClick={() => logout()}>Logout</li>
                 </ul>
             </nav>
             <img className="bars" src={mobileBars} alt="mobile bars" onClick={() => setMobileNav(!mobileNav)} />
@@ -70,9 +71,9 @@ const Header = () => {
         {mobileNav && <div className="mobile-nav">
             <nav>
                 <ul>
+                    <Link to='/'><li className="type-bold">My Books</li></Link>
                     <Link to='/add-book'><li className="type-bold">New book</li></Link>
                     <Link to='/add-category'><li className="type-bold">New category</li></Link>
-                    <Link to='/'><li className="type-bold">My Books</li></Link>
                     <li className="type-bold" onClick={() => logout()}>Logout</li>
                 </ul>
             </nav>

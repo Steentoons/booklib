@@ -83,13 +83,18 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    gap: .625rem;
+    gap: 20px;
     padding-bottom: .625rem;
+}
+
+.clear-btn {
+    padding-right: 20px;
 }
 
 .search-floating-btn-layout {
     width: 8rem;
     position: relative;
+    margin-left: 20px;
 }
 
 .library-title-layout {

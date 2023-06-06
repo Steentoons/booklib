@@ -27,16 +27,15 @@ const ReadPdf = () => {
                     const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
                     const newPdfUrl = URL.createObjectURL(blob)
 
-                    console.log(newPdfUrl)
-
                     setSuccess("Opening the book")
                     // Setting the newly generated blob url to the active state...
                     setFile(newPdfUrl)
                 }
             })
             .catch(err => {
-                if (err.response) {
-                    setError(err.response.status)
+                if (err.response.data.error) {
+                    setError(err.response.data.error)
+                } else {
                     setError("there was an error when fetching the file")
                 }
             })

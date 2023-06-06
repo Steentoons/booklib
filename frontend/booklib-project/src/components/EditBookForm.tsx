@@ -29,33 +29,7 @@ const EditBookForm = () => {
 
     const { handleSubmit, register, formState: { errors }, setValue } = useForm()
 
-    const getCoverImage = (image: string) => {
-        axios.get(`http://localhost:3000/api/media/images/${image}`, { withCredentials: true })
-            .then(res => {
-                if (res.status === 200) {
-                    console.log(res.data)
-                    return res.data
-                }
-            })
-            .catch(err => {
-                return undefined
-            })
-    }
-
-    const getFile = (file: string) => {
-        axios.get(`http://localhost:3000/api/media/files/${file}`, { withCredentials: true })
-            .then(res => {
-                if (res.status === 200) {
-                    setValue('file', res.data)
-                }
-            })
-            .catch(err => {
-                console.log(err.message)
-            })
-    }
-
     useEffect(() => {
-        console.log(currentBookId)
         // Fetching categories...
         axios.get("http://localhost:3000/api/categories", { withCredentials: true })
             .then(res => {
@@ -66,34 +40,26 @@ const EditBookForm = () => {
             .catch(err => {
                 if (err.response) {
                     setError(err.response.data.error)
+                } else {
+                    setError('There was an error when getting categories')
                 }
-
-                setError('There was an error when getting categories')
             })
 
         // Auto filling the form...
         axios.get(`http://localhost:3000/api/formdata/edit-book/${currentBookId}`, { withCredentials: true })
             .then(res => {
-                // Get the image...
-                // axios.get('http://localhost:3000/api/', { withCredentials: true })
-                // Get the file...
-                // axios.get('http://localhost:3000/api/', { withCredentials: true })
-                console.log(res.data.formdata)
                 setValue('title', res.data.formdata.title)
                 setValue('author', res.data.formdata.author)
                 setValue('year', res.data.formdata.year)
                 setValue('category', res.data.formdata.category)
                 setSelectedCategory(res.data.formdata.category)
-
-                // set them medias...
-                // setValue('cover_image', getCoverImage(res.data.formdata.cover_image))
-                // setValue('file', getFile(res.data.formdata.file))
             })
             .catch(err => {
                 if (err.response) {
                     setError(err.response.status)
+                } else {
+                    setError("There was a problem when filling up the form")
                 }
-                // setError("There was a problem when filling up the form")
             })
     }, [])
 
@@ -126,7 +92,6 @@ const EditBookForm = () => {
     // }
 
     const onSubmit: SubmitHandler<addBookFormType> = data => {
-        console.log(data)
         const formData = new FormData()
         formData.append('title', data.title)
         formData.append('author', data.author)
@@ -138,19 +103,17 @@ const EditBookForm = () => {
         // formData.append('file', data.file)
         axios.put(`http://localhost:3000/api/books/${currentBookId}`, formData, { withCredentials: true })
             .then(res => {
-                if (res.status === 201) {
+                if (res.status === 200) {
                     setSuccess(res.data)
                     setSuccess(res.data.message)
-                } else {
-                    setError(res.data.error)
                 }
             })
             .catch(err => {
                 if (err.response) {
                     setError(err.response.data.error)
+                } else {
+                    setError("There was an issue when adding a book")
                 }
-                console.log(err.response.status)
-                setError("There was an issue when adding a book")
             })
     }
 
@@ -189,11 +152,6 @@ const EditBookForm = () => {
                         <button className="btn-primary secondary btn-full" type='submit'>Submit book</button>
                     </div>
                 </form>
-
-                {/* TODO - Only show the read book when form is in edit mode */}
-                <div className="input-layout read-book-layout">
-                    <button className="btn-primary tertiary btn-full">Read Book</button>
-                </div>
             </div>
         </div>
     )

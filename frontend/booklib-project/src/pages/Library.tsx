@@ -16,7 +16,6 @@ const Library = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        console.log(`The user is ${user}`)
         if (user === null) {
             navigate('/login')
         }
@@ -24,39 +23,43 @@ const Library = () => {
 
     useEffect(() => {
         // Fetch the books...
-        axios.get('http://localhost:3000/api/books', { withCredentials: true })
-            .then(res => {
-                if (res.status === 200) {
+        if (user) {
+            axios.get('http://localhost:3000/api/books', { withCredentials: true })
+                .then(res => {
+                    if (res.status === 200) {
 
-                    setBooks([...res.data.books])
-                    setSuccess("The books were fetched successifully")
-                }
-            })
-            .catch(err => {
-                setError('There was an error while fetching the books')
-                if (err.response) {
-                    setError(err.response.data.error)
-                }
-            })
-    }, [])
+                        setBooks([...res.data.books])
+                        setSuccess("The books were fetched successifully")
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        setError(err.response.data.error)
+                    } else {
+                        setError('There was an error while fetching the books')
+                    }
+                })
+        }
+    }, [user])
 
     useEffect(() => {
-        if(refresh) {
+        if (refresh) {
             axios.get('http://localhost:3000/api/books', { withCredentials: true })
-            .then(res => {
-                if (res.status === 200) {
+                .then(res => {
+                    if (res.status === 200) {
 
-                    setBooks([...res.data.books])
-                    setSuccess('The books were fetched successifully')
-                    setRefresh(false)
-                }
-            })
-            .catch(err => {
-                if (err.response) {
-                    setError(err.response.data.error)
-                }
-                setError('There was an error while fetching the books')
-            })
+                        setBooks([...res.data.books])
+                        setSuccess('The books were fetched successifully')
+                        setRefresh(false)
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        setError(err.response.data.error)
+                    } else {
+                        setError('There was an error while fetching the books')
+                    }
+                })
         }
     }, [refresh])
 
@@ -70,7 +73,7 @@ const Library = () => {
     return (<section className='dashboard-layout'>
         <div className='dashboard'>
             <div className='library-title-layout'>
-                <h2 className="type-form-title">Available Broks</h2>
+                <h2 className="type-form-title">Available Books</h2>
             </div>
             <div className="search-layout">
                 <Search />

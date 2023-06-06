@@ -42,9 +42,9 @@ const AddBookForm = () => {
             .catch(err => {
                 if (err.response) {
                     setError(err.response.data.error)
+                } else {
+                    setError('There was an error when getting categories')
                 }
-
-                setError('There was an error when getting categories')
             })
     }, [])
 
@@ -53,7 +53,6 @@ const AddBookForm = () => {
 
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<addBookFormType>()
     const onSubmit: SubmitHandler<addBookFormType> = data => {
-        console.log(data)
         const formData = new FormData()
         formData.append('title', data.title)
         formData.append('author', data.author)
@@ -68,15 +67,14 @@ const AddBookForm = () => {
                 if (res.status === 201) {
                     setSuccess(res.data)
                     setSuccess(res.data.message)
-                } else {
-                    setError(res.data.error)
-                }
+                } 
             })
             .catch(err => {
                 if(err.response) {
                     setError(err.response.data.error)
+                } else {
+                    setError("There was an issue when adding a book")
                 }
-                setError("There was an issue when adding a book")
             })
     }
 
@@ -140,11 +138,6 @@ const AddBookForm = () => {
                         <button className="btn-primary secondary btn-full" type='submit'>Submit book</button>
                     </div>
                 </form>
-
-                {/* TODO - Only show the read book when form is in edit mode */}
-                <div className="input-layout read-book-layout">
-                    <button className="btn-primary tertiary btn-full">Read Book</button>
-                </div>
             </div>
         </div>
     )
