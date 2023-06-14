@@ -26,7 +26,7 @@ const Book = ({
     fileExt,
     user,
     year, }: BookProps) => {
-    const { setPdfUrl, setEpubUrl, setRefresh, setError, setSuccess, setCurrentBookId } = useContext(MyContext)
+    const { setPdfUrl, setEpubUrl, setRefresh, setError, setSuccess, setCurrentBookId, setUser } = useContext(MyContext)
 
     const readBook = () => {
         if(fileExt === '.pdf') {
@@ -46,8 +46,11 @@ const Book = ({
                 }
             })
             .catch(err => {
-                if(err.response) {
-                    setError(err.response.data)
+                if (err.response) {
+                    if(err.response.status === 403) {
+                        setUser(null)
+                        setError(err.response.data.error)
+                    }
                 } else {
                     setError('There was a problem when deleting a book')
                 }

@@ -35,6 +35,9 @@
                 li:hover {
                     border-bottom: solid variables.$yellow 3px;
                 }
+                .active-desktop-nav {
+                    border-bottom: solid variables.$yellow 3px;
+                }
                 .desktop-nav {
                     display: block;
                 }

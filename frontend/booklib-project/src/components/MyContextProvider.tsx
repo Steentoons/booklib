@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createContext } from 'react';
 import { useState } from 'react';
 
@@ -43,34 +43,46 @@ interface MyContextType {
 const MyContext = createContext<MyContextType>({} as MyContextType)
 
 const MyContextProvider = (props: { children: React.ReactNode }) => {
-    const handleLocalStorage = () => {
-        const userValue = localStorage.getItem("user")
-        if (userValue === null || userValue.length === 0) {
-            return null
-        } else {
-            console.log(userValue)
-            if (userValue === undefined) {
-                return null
-            }
-
-            const parsedUser = JSON.parse(userValue)
-            return parsedUser
-        }
-    }
+    
     const [pdfUrl, setPdfUrl] = useState<string | undefined>('');
     const [epubUrl, setEpubUrl] = useState<string | undefined>('');
-    const [user, setUser] = useState<User | null>(handleLocalStorage())
+    const [user, setUser] = useState<User | null>(handlesessionStorage())
     const [books, setBooks] = useState<BooksType[] | []>([])
     const [refresh, setRefresh] = useState(false)
     const [success, setSuccess] = useState<string | undefined>(undefined)
     const [error, setError] = useState<string | undefined>(undefined)
     const [popup, setPopup] = useState<string | undefined>(undefined)
     const [currentBookId, setCurrentBookId] = useState<string | undefined>(undefined)
+
+    useEffect(() => {
+        if(user === null) {
+            sessionStorage.setItem('user', '')
+        } else {
+            console.log("logged out??")
+            sessionStorage.setItem('user', JSON.stringify(user))
+        }
+    }, [user])
     return (
         <MyContext.Provider value={{ user, setUser, books, setBooks, pdfUrl, setPdfUrl, setEpubUrl, epubUrl, refresh, setRefresh, success, setSuccess, error, setError, popup, setPopup, currentBookId, setCurrentBookId }}>
             {props.children}
         </MyContext.Provider>
     )
+}
+
+// Handling local storage...
+function handlesessionStorage () {
+    const userValue = sessionStorage.getItem("user")
+    if (userValue === null || userValue.length === 0) {
+        return null
+    } else {
+        console.log(userValue)
+        if (userValue === undefined) {
+            return null
+        }
+
+        const parsedUser = JSON.parse(userValue)
+        return parsedUser
+    }
 }
 
 export { MyContext, MyContextProvider };

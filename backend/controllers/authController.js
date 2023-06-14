@@ -67,16 +67,18 @@ const login = async(req, res) => {
                 .json({ error: "There was an error when refreshing your token" });
         }
     }
+
+    // res.set('Access-Control-Allow-Origin', 'http://localhost:5173/')
     // const updateRefreshToken = await RefreshToken.updateOne({ refreshToken: [...savedTokens.refreshToken, refreshToken] })
     // console.log(updateRefreshToken)
     // Get the token back to the user...
     res.cookie("accessToken", JSON.stringify(token), {
         httpOnly: true,
-        maxAge: 15 * 60 * 60,
+        maxAge: 900000,
     });
     res.cookie("refreshToken", JSON.stringify(refreshToken), {
         httpOnly: true,
-        maxAge: 7 * 24 * 60 * 60 * 60,
+        maxAge: 604800000,
     });
     res.status(200).json({
         message: "Login was successiful",
@@ -92,13 +94,17 @@ const login = async(req, res) => {
     Login into the system and generating token...
 */
 const logout = async(req, res) => {
-    // if (!req.body.token) return res.status(400)
+
+    console.log("Trying to logout??")
+        // if (!req.body.token) return res.status(400)
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
+        res.clearCookie('refreshToken')
+        res.clearCookie('accessToken')
         return res
-            .status(403)
-            .json({ error: "There was a problem when trying to logout" });
+            .status(201)
+            .json({ message: "You were successfully logged out" });
     } else {
         const savedRefreshTokenObj = await RefreshToken.findOne();
         if (!savedRefreshTokenObj) {
@@ -121,11 +127,13 @@ const logout = async(req, res) => {
             // res.cookie('refreshToken', '', { httpOnly: true, maxAge: 0 })
             // res.cookie('accessToken', '', { httpOnly: true, maxAge: 0 })
 
+            // res.set('Access-Control-Allow-Origin', 'http://localhost:5173/')
+
             res.clearCookie('refreshToken')
             res.clearCookie('accessToken')
 
             return res
-                .status(204)
+                .status(201)
                 .json({ message: "You were successfully logged out" });
         } catch (error) {
             return res.status(503).json({ error: "Could not logout" });

@@ -9,6 +9,7 @@ const Header = () => {
     const { setUser, setBooks, setError, setSuccess, setPdfUrl, setEpubUrl } = useContext(MyContext)
     const navigate = useNavigate()
     const [mobileNav, setMobileNav] = useState(false)
+    const [activeNav, setActiveNav] = useState('my-book')
 
     const getBooks = () => {
         axios.get('http://localhost:3000/api/books', { withCredentials: true })
@@ -20,7 +21,10 @@ const Header = () => {
             })
             .catch(err => {
                 if (err.response) {
-                    setError(err.response.data.error)
+                    if(err.response.status === 403) {
+                        setUser(null)
+                        setError(err.response.data.error)
+                    }
                 } else {
                     setError('There was an uncaught error when fetching books')
                 }
@@ -29,21 +33,26 @@ const Header = () => {
 
     // @ts-ignore
     const logout = () => {
-        axios.delete('http://localhost:3000/api/authentication/logout', { withCredentials: true })
+        console.log("You are trying to logout")
+        axios.put('http://localhost:3000/api/authentication/logout', null, { withCredentials: true })
             .then(res => {
-                if (res.status === 204) {
+                console.log("Things are happening...")
+                if (res.status === 201) {
                     setUser(null)
                     setSuccess("You were logged out successifully")
                     return
                 }
             })
             .catch(err => {
+                console.log("Things are happening...")
                 if (err.response) {
                     setError(err.response.data.error)
                     if (err.response.status === 403) {
+                        console.log("Rejected")
                         setUser(null)
                     }
                 } else {
+                    console.log("This one here")
                     setError("There was a problem when logging out")
                 }
             })
@@ -59,10 +68,10 @@ const Header = () => {
             <h1 className="type-logo">booklib</h1>
             <nav className="desktop-nav">
                 <ul>
-                    <Link to='/' onClickCapture={() => resetBookUrl()}><li className="type-bold">My Books</li></Link>
-                    <Link to='/add-book' onClickCapture={() => resetBookUrl()}><li className="type-bold">New book</li></Link>
-                    <Link to='/add-category' onClickCapture={() => resetBookUrl()}><li className="type-bold">New category</li></Link>
-                    <li onClickCapture={() => resetBookUrl()} className="type-bold" onClick={() => logout()}>Logout</li>
+                    <Link to='/' onClickCapture={() => resetBookUrl()}><li className={`type-bold ${activeNav === 'my-book' ? 'active-desktop-nav' : ''}`} onClick={() => setActiveNav('my-book')}>My Books</li></Link>
+                    <Link to='/add-book' onClickCapture={() => resetBookUrl()}><li className={`type-bold ${activeNav === 'new-book' ? 'active-desktop-nav' : ''}`} onClick={() => setActiveNav('new-book')}>New book</li></Link>
+                    <Link to='/add-category' onClickCapture={() => resetBookUrl()}><li className={`type-bold ${activeNav === 'new-category' ? 'active-desktop-nav' : ''}`} onClick={() => setActiveNav('new-category')}>New category</li></Link>
+                    <li onClickCapture={() => resetBookUrl()} className={`type-bold ${activeNav === 'logout' ? 'active-desktop-nav' : ''}`} onClick={() => {logout(); setActiveNav('logout')}}>Logout</li>
                 </ul>
             </nav>
             <img className="bars" src={mobileBars} alt="mobile bars" onClick={() => setMobileNav(!mobileNav)} />
@@ -71,10 +80,10 @@ const Header = () => {
         {mobileNav && <div className="mobile-nav">
             <nav>
                 <ul>
-                    <Link to='/'><li className="type-bold">My Books</li></Link>
-                    <Link to='/add-book'><li className="type-bold">New book</li></Link>
-                    <Link to='/add-category'><li className="type-bold">New category</li></Link>
-                    <li className="type-bold" onClick={() => logout()}>Logout</li>
+                    <Link to='/' onClickCapture={() => {resetBookUrl(); setMobileNav(!mobileNav)}}><li className={`type-bold ${activeNav === 'my-book' ? 'active-desktop-nav' : ''}`}>My Books</li></Link>
+                    <Link to='/add-book' onClickCapture={() => {resetBookUrl(); setMobileNav(!mobileNav)}}><li className={`type-bold ${activeNav === 'my-book' ? 'active-desktop-nav' : ''}`}>New book</li></Link>
+                    <Link to='/add-category' onClickCapture={() => {resetBookUrl(); setMobileNav(!mobileNav)}}><li className={`type-bold ${activeNav === 'my-book' ? 'active-desktop-nav' : ''}`}>New category</li></Link>
+                    <li className={`type-bold ${activeNav === 'my-book' ? 'active-desktop-nav' : ''}`} onClick={() => {logout(); resetBookUrl(); setMobileNav(!mobileNav)}}>Logout</li>
                 </ul>
             </nav>
         </div>}

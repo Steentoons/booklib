@@ -62,7 +62,10 @@ const RegisterForm = () => {
                 })
                 .catch(err => {
                     if (err.response) {
-                        setError(err.response.data.error)
+                        if(err.response.status === 403) {
+                            setUser(null)
+                            setError(err.response.data.error)
+                        }
                     } else {
                         setError("There was a problem when signing up")
                     }

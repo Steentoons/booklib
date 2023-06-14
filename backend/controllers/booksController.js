@@ -10,6 +10,8 @@ const manageFiles = require("../helpers/manageFiles");
 */
 const getBooks = (req, res) => {
     console.log("Calling this?")
+    console.log(res.cookies)
+    console.log(req.user)
     if (!req.user) {
         return res.status(400).json({ error: "There was a problem when getting them books" })
     }

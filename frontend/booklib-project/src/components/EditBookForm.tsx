@@ -9,6 +9,7 @@ import { useLoginHook } from '../hooks/useLoginHook'
 import { Link } from 'react-router-dom'
 import { MyContext } from './MyContextProvider'
 import { CategoryType, SelectedCategoryType, addBookFormType } from './AddBookForm'
+import Header from './Header'
 
 interface EditBookFromInputs {
 
@@ -39,7 +40,10 @@ const EditBookForm = () => {
             })
             .catch(err => {
                 if (err.response) {
-                    setError(err.response.data.error)
+                    if (err.response.status === 403) {
+                        setUser(null)
+                        setError(err.response.data.error)
+                    }
                 } else {
                     setError('There was an error when getting categories')
                 }
@@ -56,7 +60,10 @@ const EditBookForm = () => {
             })
             .catch(err => {
                 if (err.response) {
-                    setError(err.response.status)
+                    if (err.response.status === 403) {
+                        setUser(null)
+                        setError(err.response.data.error)
+                    }
                 } else {
                     setError("There was a problem when filling up the form")
                 }
@@ -110,7 +117,10 @@ const EditBookForm = () => {
             })
             .catch(err => {
                 if (err.response) {
-                    setError(err.response.data.error)
+                    if (err.response.status === 403) {
+                        setUser(null)
+                        setError(err.response.data.error)
+                    }
                 } else {
                     setError("There was an issue when adding a book")
                 }
@@ -118,42 +128,45 @@ const EditBookForm = () => {
     }
 
     return (
-        <div className="form-wrapper-layout">
-            <div className="form-layout">
-                {/*@ts-ignore */}
-                <form encType='multipart/form-data' className="font-regular" onSubmit={handleSubmit(onSubmit)} >
-                    <h2 className="type-form-title">Add book to library</h2>
-                    <input className="form-input-layout" {...register('title', { required: true })} type='text' placeholder='Enter book title' />
-                    {errors.title && <p className="error-input">Title field is required</p>}
-                    <input className="form-input-layout" {...register('author', { required: true })} type='text' placeholder='Enter book author' />
-                    {errors.author && <p className="error-input">Author field is required</p>}
-                    <button type='button' onClick={() => setFillterOpen(!filterOpen)} {...register('category', { required: true })} value={selectedCategory?._id} className='dropdown-input'>{selectedCategory?.category ? selectedCategory.category : 'Select book category'}</button>
-                    {filterOpen && <div className='floating-category-filter-layout'>
-                        <ul className='floating-filter-div'>
-                            {printCategories}
-                        </ul>
-                    </div>}
-                    {errors.category && <p className="error-input">Category field is required</p>}
-                    <input className="form-input-layout" {...register('year', { required: true })} type='number' placeholder='Enter book year' />
-                    {errors.year && <p className="error-input">Year field is required</p>}
-                    {/* <div className="input-layout mt-20">
+        <>
+            {/*<Header/>*/}
+            <div className="form-wrapper-layout">
+                <div className="form-layout">
+                    {/*@ts-ignore */}
+                    <form encType='multipart/form-data' className="font-regular" onSubmit={handleSubmit(onSubmit)} >
+                        <h2 className="type-form-title">Add book to library</h2>
+                        <input className="form-input-layout" {...register('title', { required: true })} type='text' placeholder='Enter book title' />
+                        {errors.title && <p className="error-input">Title field is required</p>}
+                        <input className="form-input-layout" {...register('author', { required: true })} type='text' placeholder='Enter book author' />
+                        {errors.author && <p className="error-input">Author field is required</p>}
+                        <button type='button' onClick={() => setFillterOpen(!filterOpen)} {...register('category', { required: true })} value={selectedCategory?._id} className='dropdown-input'>{selectedCategory?.category ? selectedCategory.category : 'Select book category'}</button>
+                        {filterOpen && <div className='floating-category-filter-layout'>
+                            <ul className='floating-filter-div'>
+                                {printCategories}
+                            </ul>
+                        </div>}
+                        {errors.category && <p className="error-input">Category field is required</p>}
+                        <input className="form-input-layout" {...register('year', { required: true })} type='number' placeholder='Enter book year' />
+                        {errors.year && <p className="error-input">Year field is required</p>}
+                        {/* <div className="input-layout mt-20">
                         <label htmlFor="cover-image" className="btn-primary tertiary btn-full">Add cover image
                             <input type='file' {...register('cover_image', { required: false })} onChange={(e) => handleCoverimageInput(e)} aria-label="Add cover image" role='textbox' className="btn-hidden" id="cover-image" />
                         </label>
                         {errors.cover_image && <p className="error-input mt-20">Cover image is required</p>}
                     </div> */}
-                    {/* <div className="input-layout mt-20">
+                        {/* <div className="input-layout mt-20">
                         <label htmlFor="file" className="btn-primary tertiary btn-full">Add book file
                             <input type='file' {...register('file', { required: false })} onChange={(e) => handleFileInput(e)} aria-label="Add book file" role='textbox' className="btn-hidden" id="file" accept=".pdf,.epub" />
                         </label>
                         {errors.file && <p className="error-input mt-20">File is required</p>}
                     </div> */}
-                    <div className="input-layout">
-                        <button className="btn-primary secondary btn-full" type='submit'>Submit book</button>
-                    </div>
-                </form>
+                        <div className="input-layout">
+                            <button className="btn-primary secondary btn-full" type='submit'>Submit book</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 

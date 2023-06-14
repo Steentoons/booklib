@@ -1,6 +1,6 @@
-const express = require('express')
 const fs = require('fs')
 const path = require('path')
+const { handlePdf } = require('../helpers/fileControllerHelpers')
 
 // Method GET 
 // @params :id
@@ -28,24 +28,11 @@ const getFiles = (req, res) => {
 
     // Send back an image to the client...
     if (path.extname(fileName) === '.pdf') {
-        console.log('The extension is pdf')
-        const file = path.join(__dirname, "..", "book-uploads", fileName)
-        const data = fs.readFileSync(file);
-        const base64Data = Buffer.from(data).toString('base64');
-        res.send(base64Data)
+        // Handle pdf...
+        res.send(handlePdf(fileName))
     } else {
-        // console.log('Ext is epub')
+        // handle epub...
         const filePath = path.join(__dirname, "..", "book-uploads", fileName)
-            //     // const file = fs.readFile(filePath, (err, data) => {
-            //     //     if (err) throw err;
-            //     //     console.log(data)
-            //     //     return data
-            //     // });
-
-        // res.setHeader('Content-Type', 'application/epub');
-        // res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
-        // res.sendFile(filePath);
-
         fs.readFile(filePath, function(err, content) {
             if (err) {
                 res.writeHead(400, { 'Content-type': 'text/html' });
@@ -55,8 +42,6 @@ const getFiles = (req, res) => {
                 res.end(content);
             }
         });
-
-        // TODO Try streaming the file first...
     }
 }
 

@@ -4,6 +4,6 @@ const verifyToken = require('../middlewares/tokenVerification')
 const router = express.Router()
 
 router.post('/login', login)
-router.delete('/logout', verifyToken, logout)
+router.put('/logout', logout)
 
 module.exports = router

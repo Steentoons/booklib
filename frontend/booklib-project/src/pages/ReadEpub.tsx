@@ -1,22 +1,50 @@
 import React, { useContext, useEffect } from 'react'
 import { useState } from 'react'
-import { ReactReader, IReactReaderProps } from 'react-reader'
-import { MyContext } from '../components/MyContextProvider'
+import { ReactReader } from 'react-reader'
+import { MyContext, User } from '../components/MyContextProvider'
 import axios from 'axios'
+import Header from '../components/Header'
 
 const ReadEpub = () => {
 
-    const { epubUrl, setSuccess, setError } = useContext(MyContext)
-
+    const { epubUrl, setSuccess, setError, setUser } = useContext(MyContext)
     const [file, setFile] = useState<string | undefined>()
 
     useEffect(() => {
-        if(epubUrl.length > 0) {
-            localStorage.setItem('epubUrl', epubUrl)
-        }
-        if(localStorage.getItem('epubUrl')) {
-            // @ts-ignore
-            axios.get(localStorage.getItem('epubUrl'), { withCredentials: true })
+        setStorage(epubUrl)
+        handleBookFetchFn(setSuccess, setFile, setError, setUser)
+    }, [])
+
+    // @ts-ignore
+    // const [location, setLocation] = useState(handleLocation());
+
+    // useEffect(() => {
+    // }, [file])
+
+    return (
+        <>
+            {/*<Header/>*/}
+            <div style={{ height: '100vh', width: '100vw', paddingTop: '90px' }}>
+                {/* @ts-ignore */}
+                {file ? <ReactReader url={epubUrl} epubInitOptions={{ openAs: 'epub' }} /> : <p style={{ padding: '50px' }}>Loading</p>}
+            </div>
+        </>
+    )
+}
+
+// set local storage...
+function setStorage(epubUrl: string | undefined) {
+    if (typeof epubUrl === 'string' && epubUrl.length > 0) {
+        localStorage.setItem('epubUrl', epubUrl)
+    }
+}
+
+// Fetching the Book...
+function handleBookFetchFn(setSuccess: (success: string | undefined) => void, setFile: React.Dispatch<React.SetStateAction<string | undefined>>, setError: (error: string | undefined) => void, setUser: (user: User | null) => void) {
+    console.log("Is it you")
+    if (localStorage.getItem('epubUrl')) {
+        // @ts-ignore
+        axios.get(localStorage.getItem('epubUrl'), { withCredentials: true })
             .then(res => {
                 if (res.status === 200) {
                     const blob = new Blob([res.data], { type: 'application/epub+zip' });
@@ -29,48 +57,35 @@ const ReadEpub = () => {
             })
             .catch(err => {
                 if (err.response) {
-                    setError(err.response.data.error)
+                    if(err.response.status === 403) {
+                        setUser(null)
+                        setError(err.response.data.error)
+                    }
                 } else {
                     setError("there was an error when fetching the file")
                 }
             })
-        }
-    }, [])
+    }
+}
 
-    const handleLocation = () => {
-        if(!localStorage.getItem('location')) {
-            return null
-        }
-
-        if(typeof localStorage.getItem('location') !== 'string') {
-            //@ts-ignore
-            const parsedLocation = JSON.parse(localStorage.getItem('location'))
-            return parsedLocation
-        }
-
+// Handle the location...
+function handleLocation() {
+    if (!localStorage.getItem('location')) {
         return null
     }
 
-    // @ts-ignore
-    const [location, setLocation] = useState(handleLocation());
+    if (typeof localStorage.getItem('location') !== 'string') {
+        //@ts-ignore
+        const parsedLocation = JSON.parse(localStorage.getItem('location'))
+        return parsedLocation
+    }
 
-    useEffect(() => {
-    }, [file])
-
-    const handleLocationChanged = (epubcifi: string) => {
-        setLocation(epubcifi);
-        localStorage.setItem('location', epubcifi)
-    };
-
-    const epubUrl2 = '/src/assets/images/174f04ad58ea419ff364792dbe5a992e_unknown.epub'
-    return (
-        <div style={{ height: '100vh', width: '100vw', paddingTop: '90px' }}>
-            {/* @ts-ignore */}
-            {file ? <ReactReader url={epubUrl} epubInitOptions={{openAs: 'epub'}} locationChanged={handleLocationChanged} /> : <p style={{ padding: '50px' }}>Loading</p>}
-            {/* @ts-ignore */}
-            {/* {epubUrl2 ? <ReactReader url={epubUrl2} epubInitOptions={{openAs: 'epub'}} location={location} locationChanged={handleLocationChanged} /> : <p style={{ padding: '50px' }}>Loading</p>} */}
-        </div>
-    )
+    return null
 }
+
+function handleLocationChanged(epubcifi: string, setLocation: (value: any) => void) {
+    setLocation(epubcifi);
+    localStorage.setItem('location', epubcifi)
+};
 
 export default ReadEpub

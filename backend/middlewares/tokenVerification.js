@@ -15,7 +15,7 @@ const verifyToken = async(req, res, next) => {
                 const newToken = await refreshToken(req.cookies.refreshToken);
 
                 if (!newToken) {
-                    req.refreshTokenFailed = true;
+                    return res.status(403).json({ error: "Please login first" })
                 } else {
                     req.cookies.accessToken = newToken;
 
@@ -40,7 +40,7 @@ const verifyToken = async(req, res, next) => {
         if (!req.cookies.refreshToken) {
             req.refreshTokenFailed = true;
         } else {
-            jwt.verify(req.cookies.accessToken, process.env.JSON_TOKEN_SECRET, (err, user) => {
+            jwt.verify(JSON.parse(req.cookies.accessToken), process.env.JSON_TOKEN_SECRET, (err, user) => {
                 if (err) {
                     req.tokenRefreshFailed = true;
                 } else {

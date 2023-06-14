@@ -2,12 +2,13 @@ const RefreshToken = require("../models/refreshTokenModel");
 const jwt = require("jsonwebtoken");
 const generateToken = require("../helpers/generateToken");
 
-const refreshToken = async(refTokenQuotes) => {
+const refreshToken = async(refToken) => {
+    // console.log(refTokenQuotes)
     // Validate the inputs...
-    if (!refTokenQuotes) {
+    if (!refToken) {
         return undefined;
     }
-    const refToken = refTokenQuotes.replace(/^"(.*)"$/, '$1')
+    // const refToken = refTokenQuotes.replace(/^"(.*)"$/, '$1')
 
     try {
         // Get refresh tokens from the database...
@@ -16,24 +17,28 @@ const refreshToken = async(refTokenQuotes) => {
             return undefined
         }
 
+        console.log(savedTokenObj)
+
         const savedToken = savedTokenObj.refreshToken;
         if (!savedToken.includes(refToken)) {
+            console.log("Wasn't found")
             return undefined;
         }
+
     } catch (err) {
         return undefined
     }
 
     // Try to refresh the token...
     try {
-        const newToken = await jwt.verify(
+        const newToken = jwt.verify(
             refToken,
             process.env.JSON_REFRESH_TOKEN_SECRET,
             async(err, user) => {
                 if (err) {
                     return undefined;
                 } else {
-                    const accessToken = await generateToken({ email: user.email });
+                    const accessToken = generateToken({ email: user.email });
                     return accessToken;
                 }
             }

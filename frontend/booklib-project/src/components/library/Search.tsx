@@ -11,7 +11,7 @@ const Search = () => {
     const [filterOpen, setFilterOpen] = useState(false)
     const [categories, setCategories] = useState<CategoryType[]>([])
 
-    const { setBooks, setSuccess, setError } = useContext(MyContext)
+    const { setBooks, setSuccess, setError, setUser } = useContext(MyContext)
 
     useEffect(() => {
         axios.get('http://localhost:3000/api/categories', { withCredentials: true })
@@ -21,8 +21,11 @@ const Search = () => {
                 }
             })
             .catch(err => {
-                if(err.response) {
-                    setError(err.response.data.error) 
+                if (err.response) {
+                    if(err.response.status === 403) {
+                        setUser(null)
+                        setError(err.response.data.error)
+                    }
                 } else {
                     setError("Could not fetch categories")
                 }
@@ -38,8 +41,11 @@ const Search = () => {
                 }
             })
             .catch(err => {
-                if(err.response) {
-                    setError(err.response.data.error)
+                if (err.response) {
+                    if(err.response.status === 403) {
+                        setUser(null)
+                        setError(err.response.data.error)
+                    }
                 } else {
                     setError("Could not apply filter")
                 }
@@ -62,6 +68,11 @@ const Search = () => {
                 })
                 .catch(err => {
                     if (err.response) {
+                        if(err.response.status === 403) {
+                            setUser(null)
+                            setError(err.response.data.error)
+                        }
+                    }if (err.response) {
                         setError(err.response.data.error)
                     } else {
                         setError("There was a problem when performing the search")
@@ -81,7 +92,10 @@ const Search = () => {
             .catch(err => {
                 setError('There was an error while fetching the books')
                 if (err.response) {
-                    setError(err.response.data.error)
+                    if(err.response.status === 403) {
+                        setUser(null)
+                        setError(err.response.data.error)
+                    }
                 } else {
                     setError("There was a problem when applying the filter")
                 }

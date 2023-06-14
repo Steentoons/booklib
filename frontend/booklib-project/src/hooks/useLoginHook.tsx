@@ -17,7 +17,10 @@ export const useLoginHook = (data: LoginType, setUser: (user: User | null) => vo
         })
         .catch(err => {
             if (err.response) {
-                setError(err.response.data.error)
+                if(err.response.status === 403) {
+                    setUser(null)
+                    setError(err.response.data.error)
+                }
             } else {
                 setError('There was an error when trying to login')
             }
