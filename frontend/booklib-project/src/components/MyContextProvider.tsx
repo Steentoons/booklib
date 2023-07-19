@@ -58,7 +58,6 @@ const MyContextProvider = (props: { children: React.ReactNode }) => {
         if(user === null) {
             sessionStorage.setItem('user', '')
         } else {
-            console.log("logged out??")
             sessionStorage.setItem('user', JSON.stringify(user))
         }
     }, [user])

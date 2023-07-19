@@ -17,8 +17,8 @@ import Success from './components/Success'
 import Error from './components/Error'
 
 const App = () => {
-  const { user, error, success, setError, setSuccess } = useContext(MyContext)
-  // const navigate = useNavigate()
+  const { user, error, success, setError, setSuccess, pdfUrl, epubUrl } = useContext(MyContext)
+  const navigate = useNavigate()
   // useEffect(() => {
   //   console.log(user)
   //   if(user === null) {
@@ -44,11 +44,23 @@ const App = () => {
     }
   }, [success])
 
+  useEffect(() => {
+    if(pdfUrl) {
+      navigate('/read-pdf')
+    }
+  }, [pdfUrl])
+
+  useEffect(() => {
+    if(epubUrl) {
+      navigate('/read-epub')
+    }
+  }, [epubUrl])
+
   return (
     <>
       {/* {user && <ProtectedRoutes />} */}
       {error && <Error error={error} />}
-      {error && <Success success={success} />}
+      {success && <Success success={success} />}
       {user ? <>
         <Header />
         <Routes>

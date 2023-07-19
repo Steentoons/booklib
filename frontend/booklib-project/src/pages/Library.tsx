@@ -24,26 +24,26 @@ const Library = () => {
         }
     }, [user])
 
-    // useEffect(() => {
-    //     if (refresh) {
-    //         axios.get('http://localhost:3000/api/books', { withCredentials: true })
-    //             .then(res => {
-    //                 if (res.status === 200) {
+    useEffect(() => {
+        if (refresh) {
+            axios.get('http://localhost:3000/api/books', { withCredentials: true })
+                .then(res => {
+                    if (res.status === 200) {
 
-    //                     setBooks([...res.data.books])
-    //                     setSuccess('The books were fetched successifully')
-    //                     setRefresh(false)
-    //                 }
-    //             })
-    //             .catch(err => {
-    //                 if (err.response) {
-    //                     setError(err.response.data.error)
-    //                 } else {
-    //                     setError('There was an error while fetching the books')
-    //                 }
-    //             })
-    //     }
-    // }, [refresh])
+                        setBooks([...res.data.books])
+                        setSuccess('The books were fetched successifully')
+                        setRefresh(false)
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        setError(err.response.data.error)
+                    } else {
+                        setError('There was an error while fetching the books')
+                    }
+                })
+        }
+    }, [refresh])
 
     const printBooks = books.map((book, idx) => {
         return <Book key={idx} _id={book._id} title={book.title} fileExt={book.fileExt} author={book.author} category={book.category} cover_image={book.cover_image}
