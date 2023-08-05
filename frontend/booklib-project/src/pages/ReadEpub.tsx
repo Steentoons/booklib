@@ -41,7 +41,6 @@ function setStorage(epubUrl: string | undefined) {
 
 // Fetching the Book...
 function handleBookFetchFn(setSuccess: (success: string | undefined) => void, setFile: React.Dispatch<React.SetStateAction<string | undefined>>, setError: (error: string | undefined) => void, setUser: (user: User | null) => void) {
-    console.log("Is it you")
     if (localStorage.getItem('epubUrl')) {
         // @ts-ignore
         axios.get(localStorage.getItem('epubUrl'), { withCredentials: true })

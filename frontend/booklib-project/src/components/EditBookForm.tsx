@@ -27,6 +27,7 @@ const EditBookForm = () => {
     const [selectedCategory, setSelectedCategory] = useState<SelectedCategoryType | undefined>(undefined)
     const [coverImage, setCoverImage] = useState(null)
     const [file, setFile] = useState(null)
+    const [currCategory, setCurrCategory] = useState("")
 
     const { handleSubmit, register, formState: { errors }, setValue } = useForm()
 
@@ -57,6 +58,26 @@ const EditBookForm = () => {
                 setValue('year', res.data.formdata.year)
                 setValue('category', res.data.formdata.category)
                 setSelectedCategory(res.data.formdata.category)
+
+                // fetch category...
+                axios.get(`http://localhost:3000/api/categories/${res.data.formdata.category}`, { withCredentials: true })
+                    .then(response => {
+                        if (response.status === 200) {
+                            setCurrCategory(response.data.category[0].category)
+                        } else {
+                            setError('There was an error when getting the category')
+                        }
+                    })
+                    .catch(err => {
+                        if (err.response) {
+                            if (err.response.status === 403) {
+                                setUser(null)
+                                setError(err.response.data.error)
+                            }
+                        } else {
+                            setError('There was an error when getting the category')
+                        }
+                    })
             })
             .catch(err => {
                 if (err.response) {
@@ -139,7 +160,7 @@ const EditBookForm = () => {
                         {errors.title && <p className="error-input">Title field is required</p>}
                         <input className="form-input-layout" {...register('author', { required: true })} type='text' placeholder='Enter book author' />
                         {errors.author && <p className="error-input">Author field is required</p>}
-                        <button type='button' onClick={() => setFillterOpen(!filterOpen)} {...register('category', { required: true })} value={selectedCategory?._id} className='dropdown-input'>{selectedCategory?.category ? selectedCategory.category : 'Select book category'}</button>
+                        <button type='button' onClick={() => setFillterOpen(!filterOpen)} {...register('category', { required: true })} value={currCategory ? currCategory : selectedCategory?._id} className='dropdown-input'>{selectedCategory?.category ? selectedCategory.category : currCategory}</button>
                         {filterOpen && <div className='floating-category-filter-layout'>
                             <ul className='floating-filter-div'>
                                 {printCategories}

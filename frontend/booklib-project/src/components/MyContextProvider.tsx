@@ -74,7 +74,6 @@ function handlesessionStorage () {
     if (userValue === null || userValue.length === 0) {
         return null
     } else {
-        console.log(userValue)
         if (userValue === undefined) {
             return null
         }

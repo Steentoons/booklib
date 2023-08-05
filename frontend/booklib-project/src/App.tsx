@@ -19,14 +19,6 @@ import Error from './components/Error'
 const App = () => {
   const { user, error, success, setError, setSuccess, pdfUrl, epubUrl } = useContext(MyContext)
   const navigate = useNavigate()
-  // useEffect(() => {
-  //   console.log(user)
-  //   if(user === null) {
-  //     navigate('/login')
-  //   } else {
-  //     navigate('/library')
-  //   }
-  // }, [user])
 
   useEffect(() => {
     if (error) {

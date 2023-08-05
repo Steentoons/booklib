@@ -33,10 +33,8 @@ const Header = () => {
 
     // @ts-ignore
     const logout = () => {
-        console.log("You are trying to logout")
         axios.put('http://localhost:3000/api/authentication/logout', null, { withCredentials: true })
             .then(res => {
-                console.log("Things are happening...")
                 if (res.status === 201) {
                     setUser(null)
                     setSuccess("You were logged out successifully")
@@ -44,15 +42,12 @@ const Header = () => {
                 }
             })
             .catch(err => {
-                console.log("Things are happening...")
                 if (err.response) {
                     setError(err.response.data.error)
                     if (err.response.status === 403) {
-                        console.log("Rejected")
                         setUser(null)
                     }
                 } else {
-                    console.log("This one here")
                     setError("There was a problem when logging out")
                 }
             })
