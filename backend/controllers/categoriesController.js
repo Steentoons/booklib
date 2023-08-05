@@ -14,6 +14,23 @@ const getCategories = (req, res) => {
         });
 }
 
+// Method GET
+// Getting a category
+const getCategory = (req, res) => {
+    // validation...
+    if (!req.params.id) {
+        return res.status(400).json("There was an error when getting the category")
+    }
+
+    Category.find({ _id: req.params.id })
+        .then((category) => {
+            return res.status(200).json({ category: category })
+        })
+        .catch((err) => {
+            return res.status(500).json("There was an error when getting categories");
+        });
+}
+
 /* 
     Method POST
     Getting all categories
@@ -98,5 +115,6 @@ module.exports = {
     addCategories,
     getCategories,
     putCategory,
-    deleteCategores
+    deleteCategores,
+    getCategory
 }

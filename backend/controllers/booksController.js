@@ -13,7 +13,7 @@ const getBooks = (req, res) => {
     console.log(res.cookies)
     console.log(req.user)
     if (!req.user) {
-        return res.status(400).json({ error: "There was a problem when getting them books" })
+        return res.status(403).json({ error: "There was a problem when getting them books" })
     }
 
     console.log(req.user)
@@ -59,6 +59,10 @@ const postBooks = (req, res, next) => {
         return res
             .status(400)
             .json({ error: "The file field is empty or invalid file type" });
+    }
+
+    if (!req.user) {
+        return res.status(403).json({ error: 'Fobbiden' })
     }
 
     const { cover_image, file } = req.files

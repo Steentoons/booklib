@@ -16,9 +16,20 @@ import Form from './components/Form'
 import Success from './components/Success'
 import Error from './components/Error'
 
+// Try incoorporating clerk into the app...
+import { ClerkProvider, useUser } from "@clerk/clerk-react";
+import { SignInButton } from "@clerk/clerk-react";
+
 const App = () => {
   const { user, error, success, setError, setSuccess, pdfUrl, epubUrl } = useContext(MyContext)
   const navigate = useNavigate()
+
+  const { isSignedIn } = useUser();
+
+  // check env values
+  // useEffect(() => {
+  //   console.log(import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY)
+  // }, [])
 
   useEffect(() => {
     if (error) {
@@ -37,23 +48,31 @@ const App = () => {
   }, [success])
 
   useEffect(() => {
-    if(pdfUrl) {
+    if (pdfUrl) {
       navigate('/read-pdf')
     }
   }, [pdfUrl])
 
   useEffect(() => {
-    if(epubUrl) {
+    if (epubUrl) {
       navigate('/read-epub')
     }
   }, [epubUrl])
+
+  // Introducing Clerk
+  if (!import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY) {
+    // @ts-ignore
+    throw new Error("Missing Publishable Key")
+  }
+
+  // const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
 
   return (
     <>
       {/* {user && <ProtectedRoutes />} */}
       {error && <Error error={error} />}
       {success && <Success success={success} />}
-      {user ? <>
+      {!!isSignedIn && <>
         <Header />
         <Routes>
           <Route path="/login" element={<Form />} />
@@ -66,7 +85,9 @@ const App = () => {
           <Route path="/read-epub" element={<ReadEpub />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </> : <Form />}
+      </>}{!isSignedIn && <div className='signin-button-container'>
+          <SignInButton />
+        </div>}
     </>
   )
 }

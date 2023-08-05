@@ -15,11 +15,17 @@ import NotFound from './pages/NotFound'
 import Form from './components/Form'
 import MyProtectedRoute from './components/MyProtectedRoutes'
 
+import { ClerkProvider } from "@clerk/clerk-react";
+
+const clerkPubKey = import.meta.env.VITE_REACT_APP_CLERK_PUBLISHABLE_KEY;
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <MyContextProvider>
       <Router>
+      <ClerkProvider publishableKey={clerkPubKey}>
         <App />
+        </ClerkProvider>
       </Router>
     </MyContextProvider>
   </React.StrictMode>
